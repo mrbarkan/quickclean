@@ -9,7 +9,9 @@ final class Fixture: @unchecked Sendable {
     private let fm = FileManager.default
 
     init() throws {
-        base = fm.temporaryDirectory.appending(path: "qc-fixture-\(UUID().uuidString)")
+        let tmp = fm.temporaryDirectory.path
+        let real = realpath(tmp, nil).map { p in defer { free(p) }; return String(cString: p) } ?? tmp
+        base = URL(fileURLWithPath: real).appending(path: "qc-fixture-\(UUID().uuidString)")
         try fm.createDirectory(at: base.appending(path: "home"), withIntermediateDirectories: true)
         try fm.createDirectory(at: base.appending(path: "root"), withIntermediateDirectories: true)
     }
