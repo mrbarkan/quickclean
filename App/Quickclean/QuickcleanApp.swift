@@ -10,6 +10,7 @@ struct QuickcleanApp: App {
                 .environment(model)
                 .frame(minWidth: 980, minHeight: 600)
         }
+        .defaultSize(width: 1400, height: 820)
         .commands {
             CommandGroup(replacing: .newItem) {}
             CommandMenu("Scan") {

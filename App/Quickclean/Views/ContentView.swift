@@ -29,7 +29,7 @@ struct ContentView: View {
             }
             .inspector(isPresented: $showInspector) {
                 InspectorView(finding: model.finding(id: inspected))
-                    .inspectorColumnWidth(min: 260, ideal: 320, max: 440)
+                    .inspectorColumnWidth(min: 240, ideal: 290, max: 420)
             }
         }
         .navigationTitle("Quickclean")
