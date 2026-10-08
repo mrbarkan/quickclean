@@ -114,6 +114,7 @@ struct StubBundleInspector: BundleInspector {
         return byBundleID[id] ?? SignatureInfo(teamID: nil, isApple: false)
     }
     func lastUsed(_ url: URL) -> Date? { nil }
+    func locateApp(bundleID: String) -> URL? { nil }
 }
 
 struct DictPreferences: PreferencesReader, @unchecked Sendable {

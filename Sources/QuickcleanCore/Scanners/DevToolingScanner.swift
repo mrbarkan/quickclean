@@ -35,7 +35,22 @@ public struct DevToolingScanner: Scanner {
     ]
     static let ignoredDotfiles: Set<String> = [".DS_Store", ".localized", ".Trash", ".CFUserTextEncoding"]
 
-    public init() {}
+    /// `brew info --json=v2 --installed` output fetched earlier by the engine (it also needs cask apps).
+    let brewInfo: Result<String, CommandError>?
+
+    public init(brewInfo: Result<String, CommandError>? = nil) { self.brewInfo = brewInfo }
+
+    /// Runs `brew info --json=v2 --installed`; nil when Homebrew isn't installed.
+    public static func fetchBrewInfo(_ env: ScanEnvironment) async -> Result<String, CommandError>? {
+        guard let brew = brewPath(env) else { return nil }
+        do {
+            return .success(try await env.commands.run(brew, ["info", "--json=v2", "--installed"], timeout: 30).stdout)
+        } catch let error as CommandError {
+            return .failure(error)
+        } catch {
+            return .failure(.launchFailed("\(error)"))
+        }
+    }
 
     public func scan(_ env: ScanEnvironment, index: AppIndex) async -> ScanOutput {
         var out = ScanOutput()
@@ -74,16 +89,18 @@ public struct DevToolingScanner: Scanner {
             return
         }
         let prefix = URL(fileURLWithPath: brew).deletingLastPathComponent().deletingLastPathComponent()
-        let info: [String: Any]
-        do {
-            let r = try await env.commands.run(brew, ["info", "--json=v2", "--installed"], timeout: 30)
-            guard let parsed = try? JSONSerialization.jsonObject(with: Data(r.stdout.utf8)) as? [String: Any] else {
-                out.issues.append(ScanIssue(subject: "Homebrew", reason: "Could not understand `brew info` output."))
-                return
-            }
-            info = parsed
-        } catch {
+        var fetched = brewInfo
+        if fetched == nil { fetched = await Self.fetchBrewInfo(env) }
+        let stdout: String
+        switch fetched {
+        case .success(let text): stdout = text
+        case .failure(let error):
             out.issues.append(ScanIssue(subject: "Homebrew", reason: "`brew info` failed (\(error))."))
+            return
+        case nil: return
+        }
+        guard let info = try? JSONSerialization.jsonObject(with: Data(stdout.utf8)) as? [String: Any] else {
+            out.issues.append(ScanIssue(subject: "Homebrew", reason: "Could not understand `brew info` output."))
             return
         }
         let leavesOutput = (try? await env.commands.run(brew, ["leaves"], timeout: 30))?.stdout ?? ""

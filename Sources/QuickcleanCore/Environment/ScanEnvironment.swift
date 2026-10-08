@@ -111,6 +111,8 @@ public struct SignatureInfo: Sendable, Equatable {
 public protocol BundleInspector: Sendable {
     func signature(of url: URL) -> SignatureInfo
     func lastUsed(_ url: URL) -> Date?
+    /// Where LaunchServices knows an app with this bundle ID, if it still exists.
+    func locateApp(bundleID: String) -> URL?
 }
 
 /// Reads code signatures (without hashing the whole bundle) and Spotlight's last-used date.
@@ -136,6 +138,14 @@ public struct LiveBundleInspector: BundleInspector {
     public func lastUsed(_ url: URL) -> Date? {
         guard let item = MDItemCreateWithURL(nil, url as CFURL) else { return nil }
         return MDItemCopyAttribute(item, kMDItemLastUsedDate) as? Date
+    }
+
+    public func locateApp(bundleID: String) -> URL? {
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID),
+              FileManager.default.fileExists(atPath: url.path),
+              !url.path.contains("/.Trash/")
+        else { return nil }
+        return url
     }
 }
 

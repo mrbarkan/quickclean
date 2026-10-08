@@ -1,0 +1,243 @@
+[
+  {
+    "badges" : [
+
+    ],
+    "category" : "apps",
+    "confidence" : "high",
+    "defaultSelected" : false,
+    "evidence" : [
+      {
+        "detail" : "Found in $ROOT/Applications.",
+        "rule" : "installedApp"
+      }
+    ],
+    "explanation" : "App at $ROOT/Applications. Belongs to Foo, which is installed. Installed manually. Last-used date not recorded. Version 1.0. Why: Found in $ROOT/Applications.",
+    "id" : "apps:$ROOT/Applications/Foo.app",
+    "kind" : "app",
+    "owner" : {
+      "bundleID" : "com.foo.app",
+      "displayName" : "Foo",
+      "teamID" : "TEAM123456"
+    },
+    "ownerStatus" : "installed",
+    "paths" : [
+      "$ROOT/Applications/Foo.app"
+    ],
+    "risk" : "review",
+    "title" : "Foo"
+  },
+  {
+    "badges" : [
+
+    ],
+    "category" : "leftovers",
+    "confidence" : "medium",
+    "defaultSelected" : false,
+    "evidence" : [
+      {
+        "detail" : "Matches the known pattern for Mousecape, which is not installed.",
+        "rule" : "knownApp"
+      }
+    ],
+    "explanation" : "App data at ~/Library/Application Support. Belongs to Mousecape, which is no longer installed. Why: Matches the known pattern for Mousecape, which is not installed.",
+    "id" : "leftovers:$HOME/Library/Application Support/Mousecape",
+    "kind" : "appSupport",
+    "owner" : {
+      "bundleID" : "com.alexzielenski.Mousecape",
+      "displayName" : "Mousecape"
+    },
+    "ownerStatus" : "orphaned",
+    "paths" : [
+      "$HOME/Library/Application Support/Mousecape"
+    ],
+    "risk" : "review",
+    "title" : "Mousecape · App data"
+  },
+  {
+    "badges" : [
+
+    ],
+    "category" : "leftovers",
+    "confidence" : "high",
+    "defaultSelected" : true,
+    "evidence" : [
+      {
+        "detail" : "Named after com.spotify.client; no app with that ID is installed.",
+        "rule" : "exactBundleIDNotInstalled"
+      }
+    ],
+    "explanation" : "Cache at ~/Library/Caches. Belongs to Spotify, which is no longer installed. Why: Named after com.spotify.client; no app with that ID is installed.",
+    "id" : "leftovers:$HOME/Library/Caches/com.spotify.client",
+    "kind" : "cache",
+    "owner" : {
+      "bundleID" : "com.spotify.client",
+      "displayName" : "Spotify"
+    },
+    "ownerStatus" : "orphaned",
+    "paths" : [
+      "$HOME/Library/Caches/com.spotify.client"
+    ],
+    "risk" : "safe",
+    "title" : "Spotify · Cache"
+  },
+  {
+    "badges" : [
+
+    ],
+    "category" : "leftovers",
+    "confidence" : "high",
+    "defaultSelected" : false,
+    "evidence" : [
+      {
+        "detail" : "Named after com.foo.app.",
+        "rule" : "exactBundleID"
+      }
+    ],
+    "explanation" : "Settings file at ~/Library/Preferences. Belongs to Foo, which is installed. Why: Named after com.foo.app.",
+    "id" : "leftovers:$HOME/Library/Preferences/com.foo.app.plist",
+    "kind" : "preferences",
+    "owner" : {
+      "bundleID" : "com.foo.app",
+      "displayName" : "Foo",
+      "teamID" : "TEAM123456"
+    },
+    "ownerStatus" : "installed",
+    "paths" : [
+      "$HOME/Library/Preferences/com.foo.app.plist"
+    ],
+    "risk" : "review",
+    "title" : "Foo · Settings file"
+  },
+  {
+    "badges" : [
+
+    ],
+    "category" : "leftovers",
+    "confidence" : "medium",
+    "defaultSelected" : false,
+    "evidence" : [
+      {
+        "detail" : "Matches the known pattern for Adobe, which is not installed.",
+        "rule" : "knownApp"
+      }
+    ],
+    "explanation" : "App data at $ROOT/Library/Application Support. Belongs to Adobe, which is no longer installed. Why: Matches the known pattern for Adobe, which is not installed.",
+    "id" : "leftovers:$ROOT/Library/Application Support/Adobe",
+    "kind" : "appSupport",
+    "owner" : {
+      "displayName" : "Adobe"
+    },
+    "ownerStatus" : "orphaned",
+    "paths" : [
+      "$ROOT/Library/Application Support/Adobe"
+    ],
+    "risk" : "careful",
+    "title" : "Adobe · App data"
+  },
+  {
+    "badges" : [
+      "broken"
+    ],
+    "category" : "background",
+    "confidence" : "medium",
+    "defaultSelected" : false,
+    "evidence" : [
+      {
+        "detail" : "Matches the known pattern for Mousecape, which is not installed.",
+        "rule" : "knownApp"
+      }
+    ],
+    "explanation" : "Launch agent at ~/Library/LaunchAgents. Belongs to Mousecape, which is no longer installed. Its program $HOME/Library/Application Support/Mousecape/listener no longer exists. Starts automatically at login. Why: Matches the known pattern for Mousecape, which is not installed.",
+    "id" : "background:$HOME/Library/LaunchAgents/com.alexzielenski.mousecloak.listener.plist",
+    "kind" : "launchAgent",
+    "owner" : {
+      "bundleID" : "com.alexzielenski.Mousecape",
+      "displayName" : "Mousecape"
+    },
+    "ownerStatus" : "orphaned",
+    "paths" : [
+      "$HOME/Library/LaunchAgents/com.alexzielenski.mousecloak.listener.plist"
+    ],
+    "risk" : "careful",
+    "title" : "Mousecape · Launch agent"
+  },
+  {
+    "badges" : [
+
+    ],
+    "category" : "devTooling",
+    "confidence" : "none",
+    "defaultSelected" : false,
+    "evidence" : [
+      {
+        "detail" : "No installed app, known app or macOS component matches “ssh”.",
+        "rule" : "noMatch"
+      }
+    ],
+    "explanation" : "Dotfile at ~. Could not identify which app created this. Why: No installed app, known app or macOS component matches “ssh”.",
+    "id" : "devTooling:$HOME/.ssh",
+    "kind" : "dotfile",
+    "ownerStatus" : "unknown",
+    "paths" : [
+      "$HOME/.ssh"
+    ],
+    "protectedReason" : "Holds your personal data or configuration (.ssh).",
+    "risk" : "protected",
+    "title" : ".ssh"
+  },
+  {
+    "badges" : [
+
+    ],
+    "category" : "devTooling",
+    "confidence" : "high",
+    "defaultSelected" : false,
+    "evidence" : [
+      {
+        "detail" : "Listed by `brew info --installed`.",
+        "rule" : "homebrew"
+      }
+    ],
+    "explanation" : "Homebrew formula at $ROOT/opt/homebrew/Cellar. Belongs to Homebrew, which is installed. JavaScript runtime. Installed on its own; nothing else needs it. Why: Listed by `brew info --installed`.",
+    "id" : "devTooling:brew:formula:node",
+    "kind" : "brewFormula",
+    "owner" : {
+      "displayName" : "Homebrew"
+    },
+    "ownerStatus" : "installed",
+    "paths" : [
+      "$ROOT/opt/homebrew/Cellar/node"
+    ],
+    "risk" : "review",
+    "title" : "node"
+  },
+  {
+    "badges" : [
+
+    ],
+    "category" : "settings",
+    "confidence" : "high",
+    "defaultSelected" : false,
+    "evidence" : [
+      {
+        "detail" : "Compared with the macOS 27 default for this setting.",
+        "rule" : "defaults"
+      }
+    ],
+    "explanation" : "Setting at ~/Library/Preferences. Part of macOS or an Apple app. com.apple.dock › autohide is on; macOS default is off. Reset will be available in a later version. Why: Compared with the macOS 27 default for this setting.",
+    "id" : "settings:com.apple.dock:autohide",
+    "kind" : "settingsKey",
+    "owner" : {
+      "bundleID" : "com.apple.dock",
+      "displayName" : "macOS"
+    },
+    "ownerStatus" : "apple",
+    "paths" : [
+      "$HOME/Library/Preferences/com.apple.dock.plist"
+    ],
+    "protectedReason" : "System setting. Resetting it will come in a later version.",
+    "risk" : "protected",
+    "title" : "Dock: automatically hide"
+  }
+]

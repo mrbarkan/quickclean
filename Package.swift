@@ -11,10 +11,6 @@ let package = Package(
     targets: [
         .target(name: "QuickcleanCore", resources: [.process("Resources")]),
         .executableTarget(name: "qc", dependencies: ["QuickcleanCore"]),
-        .testTarget(
-            name: "QuickcleanCoreTests",
-            dependencies: ["QuickcleanCore"],
-            resources: [.copy("Fixtures")]
-        ),
+        .testTarget(name: "QuickcleanCoreTests", dependencies: ["QuickcleanCore"], exclude: ["Fixtures"]),
     ]
 )
