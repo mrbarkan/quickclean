@@ -3,3 +3,7 @@
 DerivedData/
 xcuserdata/
 *.xcuserstate
+.superpowers/
+build/
+*.dmg
+App/Quickclean.xcodeproj/
