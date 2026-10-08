@@ -28,7 +28,7 @@ public struct Classifier: Sendable {
         let (risk, reason) = risk(raw, a)
         var badges = raw.badges
         if let modified = raw.modified, env.now.timeIntervalSince(modified) > Self.staleAge { badges.insert(.stale) }
-        if let id = a.owner?.bundleID, env.runningBundleIDs.contains(id) { badges.insert(.running) }
+        if raw.kind != .settingsKey, let id = a.owner?.bundleID, env.runningBundleIDs.contains(id) { badges.insert(.running) }
 
         let selected = risk == .safe && a.confidence == .high && a.status == .orphaned && !badges.contains(.running)
         return Finding(

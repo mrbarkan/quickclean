@@ -2,7 +2,7 @@ import Foundation
 
 /// App data left in the standard Library folders, in both the user and system domains.
 public struct LeftoversScanner: Scanner {
-    public var category: Category { .leftovers }
+    public var category: ScanCategory { .leftovers }
 
     static let locations: [(String, Kind)] = [
         ("Application Support", .appSupport), ("Caches", .cache), ("Preferences", .preferences),

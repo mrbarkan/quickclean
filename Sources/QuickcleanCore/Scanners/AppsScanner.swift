@@ -2,7 +2,7 @@ import Foundation
 
 /// One finding per installed app.
 public struct AppsScanner: Scanner {
-    public var category: Category { .apps }
+    public var category: ScanCategory { .apps }
 
     public init() {}
 

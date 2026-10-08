@@ -1,6 +1,6 @@
 import Foundation
 
-public enum Category: String, Codable, Sendable, CaseIterable, Hashable {
+public enum ScanCategory: String, Codable, Sendable, CaseIterable, Hashable {
     case apps, leftovers, background, addons, devTooling, settings
 
     public var label: String {
@@ -86,7 +86,7 @@ public struct ScanIssue: Codable, Sendable, Hashable {
 /// A fully attributed and classified item, ready for review.
 public struct Finding: Identifiable, Codable, Sendable, Hashable {
     public var id: String
-    public var category: Category
+    public var category: ScanCategory
     public var kind: Kind
     public var title: String
     public var paths: [String]
@@ -103,7 +103,7 @@ public struct Finding: Identifiable, Codable, Sendable, Hashable {
     public var protectedReason: String?
 
     public init(
-        id: String, category: Category, kind: Kind, title: String, paths: [String], size: Int64?,
+        id: String, category: ScanCategory, kind: Kind, title: String, paths: [String], size: Int64?,
         owner: Owner?, ownerStatus: OwnerStatus, confidence: Confidence, risk: Risk, badges: Set<Badge>,
         explanation: String, evidence: [Evidence], modified: Date?, defaultSelected: Bool,
         protectedReason: String?
@@ -144,7 +144,7 @@ public struct PresetAttribution: Sendable {
 
 /// What a scanner reports before attribution and classification.
 public struct RawFinding: Sendable {
-    public var category: Category
+    public var category: ScanCategory
     public var kind: Kind
     public var name: String
     public var paths: [URL]
@@ -159,7 +159,7 @@ public struct RawFinding: Sendable {
     public var idOverride: String?
 
     public init(
-        category: Category, kind: Kind, name: String, paths: [URL], identifier: String? = nil,
+        category: ScanCategory, kind: Kind, name: String, paths: [URL], identifier: String? = nil,
         programPath: String? = nil, preset: PresetAttribution? = nil, badges: Set<Badge> = [],
         modified: Date? = nil, detail: String? = nil, riskOverride: Risk? = nil,
         inSystemDomain: Bool = false, idOverride: String? = nil

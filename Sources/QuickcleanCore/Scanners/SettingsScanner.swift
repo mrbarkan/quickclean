@@ -2,7 +2,7 @@ import Foundation
 
 /// macOS settings whose current value differs from a clean install's default.
 public struct SettingsScanner: Scanner {
-    public var category: Category { .settings }
+    public var category: ScanCategory { .settings }
     let reference: ReferenceData
 
     public init(reference: ReferenceData = .bundled) { self.reference = reference }

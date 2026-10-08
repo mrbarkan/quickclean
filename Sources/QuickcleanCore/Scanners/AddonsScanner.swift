@@ -2,7 +2,7 @@ import Foundation
 
 /// Plugins and extras that hook into macOS or its apps.
 public struct AddonsScanner: Scanner {
-    public var category: Category { .addons }
+    public var category: ScanCategory { .addons }
 
     static let shared: [(String, Kind)] = [
         ("QuickLook", .quickLookPlugin), ("Spotlight", .spotlightImporter), ("PreferencePanes", .preferencePane),

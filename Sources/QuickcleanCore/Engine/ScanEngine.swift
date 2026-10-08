@@ -1,10 +1,10 @@
 import Foundation
 
 public enum ScanEvent: Sendable {
-    case started(Category)
+    case started(ScanCategory)
     case finding(Finding)
     case issue(ScanIssue)
-    case finished(Category)
+    case finished(ScanCategory)
     case size(id: String, bytes: Int64)
     case completed
 }
@@ -13,11 +13,11 @@ public enum ScanEvent: Sendable {
 public struct ScanEngine: Sendable {
     let env: ScanEnvironment
     let reference: ReferenceData
-    let categories: Set<Category>
+    let categories: Set<ScanCategory>
 
     static let sizingConcurrency = 8
 
-    public init(env: ScanEnvironment, reference: ReferenceData = .bundled, categories: Set<Category> = Set(Category.allCases)) {
+    public init(env: ScanEnvironment, reference: ReferenceData = .bundled, categories: Set<ScanCategory> = Set(ScanCategory.allCases)) {
         self.env = env
         self.reference = reference
         self.categories = categories
@@ -48,7 +48,7 @@ public struct ScanEngine: Sendable {
             }
         }
         for i in findings.indices { findings[i].size = sizes[findings[i].id] }
-        let order = Dictionary(uniqueKeysWithValues: Category.allCases.enumerated().map { ($1, $0) })
+        let order = Dictionary(uniqueKeysWithValues: ScanCategory.allCases.enumerated().map { ($1, $0) })
         findings.sort { (order[$0.category]!, $0.id) < (order[$1.category]!, $1.id) }
         return (findings, issues)
     }
@@ -71,7 +71,7 @@ public struct ScanEngine: Sendable {
         let env = env
         var seen = Set<String>()
         var toSize: [Finding] = []
-        await withTaskGroup(of: (Category, ScanOutput).self) { group in
+        await withTaskGroup(of: (ScanCategory, ScanOutput).self) { group in
             for scanner in scanners {
                 group.addTask {
                     emit(.started(scanner.category))

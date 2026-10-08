@@ -2,7 +2,7 @@ import Foundation
 
 /// Things that run without being opened: launchd jobs, privileged helpers, kernel and system extensions.
 public struct BackgroundScanner: Scanner {
-    public var category: Category { .background }
+    public var category: ScanCategory { .background }
 
     static let loginItemsIssue = ScanIssue(
         subject: "Login Items",

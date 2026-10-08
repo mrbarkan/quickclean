@@ -91,7 +91,7 @@ private let goldenURL = URL(fileURLWithPath: #filePath).deletingLastPathComponen
 @Test func engineStreamsEventsAndCompletes() async throws {
     let (fx, env) = try makeFixtureMac()
     defer { withExtendedLifetime(fx) {} }
-    var started = Set<QuickcleanCore.Category>(), finished = Set<QuickcleanCore.Category>()
+    var started = Set<ScanCategory>(), finished = Set<ScanCategory>()
     var findings = 0, sizes = 0, completed = false
     for await event in ScanEngine(env: env).events() {
         switch event {
@@ -103,7 +103,7 @@ private let goldenURL = URL(fileURLWithPath: #filePath).deletingLastPathComponen
         case .completed: completed = true
         }
     }
-    #expect(started == Set(QuickcleanCore.Category.allCases))
+    #expect(started == Set(ScanCategory.allCases))
     #expect(finished == started)
     #expect(findings > 5 && sizes > 0 && completed)
 }

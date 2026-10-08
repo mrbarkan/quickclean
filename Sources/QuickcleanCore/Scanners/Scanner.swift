@@ -11,7 +11,7 @@ public struct ScanOutput: Sendable {
 }
 
 public protocol Scanner: Sendable {
-    var category: Category { get }
+    var category: ScanCategory { get }
     func scan(_ env: ScanEnvironment, index: AppIndex) async -> ScanOutput
 }
 

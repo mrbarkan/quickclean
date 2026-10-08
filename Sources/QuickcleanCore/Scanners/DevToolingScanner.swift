@@ -2,7 +2,7 @@ import Foundation
 
 /// Homebrew, developer caches and toolchains, and dotfiles in the home folder.
 public struct DevToolingScanner: Scanner {
-    public var category: Category { .devTooling }
+    public var category: ScanCategory { .devTooling }
 
     /// (home-relative path, display name, owning tool)
     static let caches: [(String, String, String)] = [

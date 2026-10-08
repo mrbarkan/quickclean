@@ -34,3 +34,11 @@ import Testing
     #expect(f.paths.first?.lastPathComponent == ".GlobalPreferences.plist")
     #expect(f.detail?.contains("not set") == true)
 }
+
+@Test func settingsAreNeverMarkedRunning() async throws {
+    let fx = try Fixture()
+    let env = fx.env(preferences: ["com.apple.dock": ["autohide": true]], running: ["com.apple.dock"])
+    let result = await ScanEngine(env: env, categories: [.settings]).run()
+    let f = try #require(result.findings.first)
+    #expect(!f.badges.contains(.running))
+}
