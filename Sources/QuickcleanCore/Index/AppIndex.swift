@@ -13,6 +13,8 @@ public struct InstalledApp: Sendable, Hashable {
     public var source: AppSource
     public var url: URL
     public var lastUsed: Date?
+    /// Bundle IDs of extensions, helpers and login items inside the app.
+    public var embeddedIDs: [String] = []
 }
 
 /// Every installed app, with the lookups attribution needs.
@@ -23,7 +25,11 @@ public struct AppIndex: Sendable {
 
     public init(apps: [InstalledApp]) {
         self.apps = apps
-        byBundleID = Dictionary(apps.map { ($0.bundleID.lowercased(), $0) }, uniquingKeysWith: { a, _ in a })
+        var ids = Dictionary(apps.map { ($0.bundleID.lowercased(), $0) }, uniquingKeysWith: { a, _ in a })
+        for app in apps {
+            for id in app.embeddedIDs where ids[id.lowercased()] == nil { ids[id.lowercased()] = app }
+        }
+        byBundleID = ids
         byName = Dictionary(apps.map { (Identifier.normalize($0.name), $0) }, uniquingKeysWith: { a, _ in a })
     }
 
@@ -94,6 +100,23 @@ public enum AppIndexBuilder {
         return InstalledApp(
             bundleID: bundleID, name: name.isEmpty ? fileName : name,
             version: info["CFBundleShortVersionString"] as? String, teamID: signature.teamID,
-            isAppleSigned: signature.isApple, source: source, url: url, lastUsed: env.bundles.lastUsed(url))
+            isAppleSigned: signature.isApple, source: source, url: url, lastUsed: env.bundles.lastUsed(url),
+            embeddedIDs: embeddedIDs(in: url))
+    }
+
+    private static let embeddedFolders = [
+        "Contents/PlugIns", "Contents/Extensions", "Contents/Library/LoginItems", "Contents/Library/LaunchServices",
+        "Contents/Library/SystemExtensions", "Contents/XPCServices", "Contents/Helpers", "Contents/MacOS",
+    ]
+
+    private static func embeddedIDs(in app: URL) -> [String] {
+        embeddedFolders.flatMap { folder -> [String] in
+            let dir = app.appending(path: folder)
+            let children = (try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)) ?? []
+            return children.compactMap { child in
+                guard !child.pathExtension.isEmpty else { return nil }
+                return NSDictionary(contentsOf: child.appending(path: "Contents/Info.plist"))?["CFBundleIdentifier"] as? String
+            }
+        }
     }
 }

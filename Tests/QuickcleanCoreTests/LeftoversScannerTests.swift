@@ -55,3 +55,13 @@ import Testing
         #expect(Fixture.now.timeIntervalSince(modified) > 299 * 86_400)
     }
 }
+
+@Test func containersCarryTheirCreator() async throws {
+    let fx = try Fixture()
+    try fx.plist("home/Library/Group Containers/group.com.facebook.family/.com.apple.containermanagerd.metadata.plist",
+                 ["MCMMetadataCreator": "net.whatsapp.WhatsApp", "MCMMetadataIdentifier": "group.com.facebook.family"])
+    try fx.dir("home/Library/Containers/com.plain.app")
+    let out = await LeftoversScanner().scan(fx.env(), index: AppIndex(apps: []))
+    #expect(out.findings.first { $0.identifier == "group.com.facebook.family" }?.creatorID == "net.whatsapp.WhatsApp")
+    #expect(out.findings.first { $0.identifier == "com.plain.app" }?.creatorID == nil)
+}

@@ -831,21 +831,36 @@
   "name": "Boris FX",
   "bundleID": null,
   "customization": false,
-  "note": "Boris FX."
+  "note": "Boris FX.",
+  "installedPaths": [
+   "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/BorisFX",
+   "/Library/OFX/Plugins/BorisFX",
+   "/Library/Application Support/BorisFX"
+  ]
  },
  {
   "pattern": "borisfx",
   "name": "Boris FX",
   "bundleID": null,
   "customization": false,
-  "note": "Boris FX."
+  "note": "Boris FX.",
+  "installedPaths": [
+   "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/BorisFX",
+   "/Library/OFX/Plugins/BorisFX",
+   "/Library/Application Support/BorisFX"
+  ]
  },
  {
   "pattern": "genarts",
   "name": "Boris FX",
   "bundleID": null,
   "customization": false,
-  "note": "Boris FX."
+  "note": "Boris FX.",
+  "installedPaths": [
+   "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/BorisFX",
+   "/Library/OFX/Plugins/BorisFX",
+   "/Library/Application Support/BorisFX"
+  ]
  },
  {
   "pattern": "com.blackmagic-design",
@@ -1069,14 +1084,20 @@
   "name": "ProductionCrate",
   "bundleID": null,
   "customization": false,
-  "note": "ProductionCrate."
+  "note": "ProductionCrate.",
+  "installedPaths": [
+   "/Library/Application Support/ProductionCrate"
+  ]
  },
  {
   "pattern": "productioncrate",
   "name": "ProductionCrate",
   "bundleID": null,
   "customization": false,
-  "note": "ProductionCrate."
+  "note": "ProductionCrate.",
+  "installedPaths": [
+   "/Library/Application Support/ProductionCrate"
+  ]
  },
  {
   "pattern": "com.duckduckgo",
@@ -1119,5 +1140,256 @@
   "bundleID": "com.stremio.stremio-shell-macos",
   "customization": false,
   "note": "Stremio."
+ },
+ {
+  "pattern": "com.microsoft.vscode",
+  "name": "Visual Studio Code",
+  "bundleID": "com.microsoft.VSCode",
+  "customization": false,
+  "note": "Microsoft's code editor."
+ },
+ {
+  "pattern": "vscode",
+  "name": "Visual Studio Code",
+  "bundleID": "com.microsoft.VSCode",
+  "customization": false,
+  "note": "Microsoft's code editor."
+ },
+ {
+  "pattern": ".vscode",
+  "name": "Visual Studio Code",
+  "bundleID": "com.microsoft.VSCode",
+  "customization": false,
+  "note": "Microsoft's code editor (extensions folder)."
+ },
+ {
+  "pattern": "com.microsoft.edgemac",
+  "name": "Microsoft Edge",
+  "bundleID": "com.microsoft.edgemac",
+  "customization": false,
+  "note": "Microsoft's web browser."
+ },
+ {
+  "pattern": "microsoft edge",
+  "name": "Microsoft Edge",
+  "bundleID": "com.microsoft.edgemac",
+  "customization": false,
+  "note": "Microsoft's web browser."
+ },
+ {
+  "pattern": "com.microsoft.teams",
+  "name": "Microsoft Teams",
+  "bundleID": "com.microsoft.teams2",
+  "customization": false,
+  "note": "Microsoft's chat and meetings app."
+ },
+ {
+  "pattern": "com.microsoft.autoupdate",
+  "name": "Microsoft AutoUpdate",
+  "bundleID": "com.microsoft.autoupdate2",
+  "customization": false,
+  "note": "Microsoft's updater; often left behind after Office is removed."
+ },
+ {
+  "pattern": "com.adobe.premierepro",
+  "name": "Adobe Premiere Pro",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe's video editor."
+ },
+ {
+  "pattern": "com.adobe.premiere pro",
+  "name": "Adobe Premiere Pro",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe's video editor."
+ },
+ {
+  "pattern": "com.google.gemini",
+  "name": "Gemini",
+  "bundleID": "com.google.GeminiMacOS",
+  "customization": false,
+  "note": "Google's Gemini app."
+ },
+ {
+  "pattern": ".gemini",
+  "name": "Gemini CLI and Antigravity",
+  "bundleID": null,
+  "customization": false,
+  "note": "data and settings for Google's command-line AI tools.",
+  "library": true
+ },
+ {
+  "pattern": ".claude",
+  "name": "Claude Code CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line coding tool.",
+  "library": true
+ },
+ {
+  "pattern": ".claude.json",
+  "name": "Claude Code CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line coding tool.",
+  "library": true
+ },
+ {
+  "pattern": "claude.json",
+  "name": "Claude Code CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line coding tool.",
+  "library": true
+ },
+ {
+  "pattern": ".cursor",
+  "name": "Cursor",
+  "bundleID": "com.todesktop.230313mzl4w4u92",
+  "customization": false,
+  "note": "the Cursor AI code editor."
+ },
+ {
+  "pattern": ".codex",
+  "name": "Codex CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line coding tool.",
+  "library": true
+ },
+ {
+  "pattern": ".copilot",
+  "name": "GitHub Copilot CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line coding tool.",
+  "library": true
+ },
+ {
+  "pattern": ".supabase",
+  "name": "Supabase CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": ".android",
+  "name": "Android Studio",
+  "bundleID": "com.google.android.studio",
+  "customization": false,
+  "note": "Android Studio and the Android SDK."
+ },
+ {
+  "pattern": "com.buzz",
+  "name": "Buzz",
+  "bundleID": "com.chidiwilliams.buzz",
+  "customization": false,
+  "note": "Buzz, an offline audio transcription app."
+ },
+ {
+  "pattern": "anydesk",
+  "name": "AnyDesk",
+  "bundleID": "com.philandro.anydesk",
+  "customization": false,
+  "note": "AnyDesk remote desktop."
+ },
+ {
+  "pattern": ".anydesk",
+  "name": "AnyDesk",
+  "bundleID": "com.philandro.anydesk",
+  "customization": false,
+  "note": "AnyDesk remote desktop."
+ },
+ {
+  "pattern": "raffistudio",
+  "name": "Convert & Compress",
+  "bundleID": "raffistudio.image-tools",
+  "customization": false,
+  "note": "an image conversion app."
+ },
+ {
+  "pattern": "lockerastore",
+  "name": "Lockera",
+  "bundleID": "com.imagetasks.mac.Lockera",
+  "customization": false,
+  "note": "Lockera, a file locker app."
+ },
+ {
+  "pattern": "com.discord",
+  "name": "Discord",
+  "bundleID": "com.hnc.Discord",
+  "customization": false,
+  "note": "Discord chat."
+ },
+ {
+  "pattern": "com.genarts",
+  "name": "Boris FX",
+  "bundleID": null,
+  "customization": false,
+  "note": "Boris FX plug-ins (Sapphire, Mocha, Continuum).",
+  "installedPaths": [
+   "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/BorisFX",
+   "/Library/OFX/Plugins/BorisFX",
+   "/Library/Application Support/BorisFX"
+  ]
+ },
+ {
+  "pattern": "genarts",
+  "name": "Boris FX",
+  "bundleID": null,
+  "customization": false,
+  "note": "Boris FX plug-ins; holds their licenses.",
+  "installedPaths": [
+   "/Library/Application Support/Adobe/Common/Plug-ins/7.0/MediaCore/BorisFX",
+   "/Library/OFX/Plugins/BorisFX",
+   "/Library/Application Support/BorisFX"
+  ]
+ },
+ {
+  "pattern": ".productioncrate",
+  "name": "ProductionCrate",
+  "bundleID": null,
+  "customization": false,
+  "note": "ProductionCrate's LaForge plug-ins; holds the sign-in.",
+  "installedPaths": [
+   "/Library/Application Support/ProductionCrate"
+  ]
+ },
+ {
+  "pattern": "com.retromac",
+  "name": "RetroMac",
+  "bundleID": null,
+  "customization": true,
+  "note": "Replaces system cursors (including the beachball), the wallpaper and other visuals with retro themes while it runs."
+ },
+ {
+  "pattern": "retromac",
+  "name": "RetroMac",
+  "bundleID": null,
+  "customization": true,
+  "note": "Replaces system cursors (including the beachball), the wallpaper and other visuals with retro themes while it runs."
+ },
+ {
+  "pattern": "com.ibluebox",
+  "name": "Lickable Menu Bar",
+  "bundleID": null,
+  "customization": true,
+  "note": "Restyles the menu bar."
+ },
+ {
+  "pattern": "com.lemon.lvoverseas",
+  "name": "CapCut",
+  "bundleID": null,
+  "customization": false,
+  "note": "CapCut video editor."
+ },
+ {
+  "pattern": "com.bytedance",
+  "name": "ByteDance apps",
+  "bundleID": null,
+  "customization": false,
+  "note": "ByteDance apps (Lark, CapCut)."
  }
 ]

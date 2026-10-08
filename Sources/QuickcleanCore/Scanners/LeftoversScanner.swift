@@ -35,9 +35,14 @@ public struct LeftoversScanner: Scanner {
     }
 
     private func finding(_ url: URL, _ kind: Kind, _ system: Bool) -> RawFinding {
-        RawFinding(
+        var raw = RawFinding(
             category: .leftovers, kind: kind, name: url.lastPathComponent, paths: [url],
             identifier: Identifier.strip(url.lastPathComponent), modified: Listing.modified(url),
             inSystemDomain: system)
+        if kind == .container || kind == .groupContainer {
+            let metadata = NSDictionary(contentsOf: url.appending(path: ".com.apple.containermanagerd.metadata.plist"))
+            raw.creatorID = metadata?["MCMMetadataCreator"] as? String
+        }
+        return raw
     }
 }

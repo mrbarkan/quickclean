@@ -33,9 +33,6 @@ for d in ["/System/Library/LaunchAgents", "/System/Library/LaunchDaemons"]:
                 job = plistlib.load(f)
         except Exception:
             continue
-        label = job.get("Label", "")
-        if label:
-            names.add(label.split(".")[-1].lower())
         program = job.get("Program") or (job.get("ProgramArguments") or [None])[0]
         if program:
             add(program)
@@ -57,19 +54,24 @@ for app in glob.glob("/System/Applications/**/*.app", recursive=True) + \
 manual = """
 apple icloud addressbook callhistorydb callhistorytransactions clouddocs knowledge familycircle familycircled
 familysettings syncservices mobilesync dock homekit crashreporter diagnosticreports diagnosticreportsfornewhardware
-differentialprivacy diskimages databases desktop pictures caches colorsync controlcenter fileprovider gamekit
+differentialprivacy diskimages databases desktop pictures colorsync controlcenter fileprovider gamekit
 intelligenceflow passkit photossearch privacypreservingmeasurement proapps script editor siritsservice
 siriTTSService spotlight tv music facetime animoji app store askpermission askpermissiond btserver baseband cloudkit
 contextstoreagent windowserver xsan ilifemediabrowser lsmimagecache trickplay tvapp_bag tvappservices
-installer_telemetry mobilemeaccounts mcxtools lkdc-setup default.store loginwindow mbuseragent
+installer_telemetry mobilemeaccounts mcxtools lkdc-setup loginwindow mbuseragent
 networkserviceproxy sharedfilelistd tipsd icdd icloudmailagent identityservicesd livefsd localizationswitcherd
 locationaccessstored homeenergyd contactsd corespotlightd diagnostics_agent embeddedbinaryvalidationutility
-ambientsettingstests keychains metadata appstore assistant assistants autosave information
+keychains metadata appstore assistant assistants autosave information
 """.split()
 names.update(n.lower() for n in manual)
 names.update({"desktop pictures", "app store", "script editor"})
 # Apple-internal names that third-party software also uses for its own folders.
-names -= {"sentry"}
+names -= {"sentry", "caches", "purge", "default.store", "profiles", "ambientsettingstests"}
+# Generic words that third-party products also use for their folders.
+names -= set("""spark flurry airship synapse ruby hydra nexus sage vista pip bash swift focus drift jet recap chat
+helper agent daemon service user root index history report daily export importer remote scan check backup
+installer uninstall storage store editor console metal mouse keyboard battery lightning code python node java
+go git cache data logs log temp tmp update updater settings config preferences sync cloud""".split())
 
 json.dump({
     "appBundleIDs": sorted(bundle_ids),

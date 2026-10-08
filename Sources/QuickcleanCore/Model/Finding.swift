@@ -157,6 +157,8 @@ public struct RawFinding: Sendable {
     public var riskOverride: Risk?
     public var inSystemDomain: Bool
     public var idOverride: String?
+    /// Bundle ID that created a container, from its containermanagerd metadata.
+    public var creatorID: String?
 
     public init(
         category: ScanCategory, kind: Kind, name: String, paths: [URL], identifier: String? = nil,

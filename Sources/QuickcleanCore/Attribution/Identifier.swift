@@ -25,7 +25,7 @@ public enum Identifier {
     /// Removes file decorations: .plist, .savedState, .binarycookies and ByHost UUID/hex suffixes.
     public static func strip(_ name: String) -> String {
         var s = name
-        for suffix in [".plist", ".savedState", ".binarycookies"] where s.hasSuffix(suffix) {
+        for suffix in [".plist", ".savedState", ".binarycookies", ".log"] where s.hasSuffix(suffix) {
             s.removeLast(suffix.count)
         }
         if let r = s.range(of: #"\.([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}|[0-9A-Fa-f]{12})$"#,
