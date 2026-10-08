@@ -17,7 +17,8 @@ public enum Identifier {
     /// Reverse-DNS like "com.vendor.app": at least three non-empty parts starting with a known TLD.
     public static func isBundleLike(_ s: String) -> Bool {
         let parts = s.split(separator: ".", omittingEmptySubsequences: false)
-        guard parts.count >= 3, parts.allSatisfy({ !$0.isEmpty }), !s.contains(" ") else { return false }
+        guard parts.count >= 3, parts.allSatisfy({ !$0.isEmpty }),
+              !parts[0].contains(" "), !parts[1].contains(" ") else { return false }
         return topLevelDomains.contains(parts[0].lowercased())
     }
 

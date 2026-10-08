@@ -26,7 +26,7 @@
   {"domain": "NSGlobalDomain", "key": "NSWindowResizeTime", "title": "Window resize animation speed (hidden tweak)", "defaultValue": null},
   {"domain": "NSGlobalDomain", "key": "NSAutomaticWindowAnimationsEnabled", "title": "Window opening animations (hidden tweak)", "defaultValue": null},
   {"domain": "NSGlobalDomain", "key": "AppleInterfaceStyle", "title": "Appearance: dark mode", "defaultValue": null},
-  {"domain": "com.apple.universalaccess", "key": "cursorIsCustomized", "title": "Pointer: custom outline or fill color", "defaultValue": null, "note": "Set when the pointer colors were changed in Accessibility › Display."},
+  {"domain": "com.apple.universalaccess", "key": "cursorIsCustomized", "title": "Pointer: custom outline or fill color", "defaultValue": null, "note": "Set when the pointer outline or fill color was changed. To undo it now: System Settings › Accessibility › Display › Pointer › Reset."},
   {"domain": "com.apple.universalaccess", "key": "mouseDriverCursorSize", "title": "Pointer: size", "defaultValue": null},
   {"domain": "com.apple.universalaccess", "key": "reduceMotion", "title": "Accessibility: reduce motion", "defaultValue": null},
   {"domain": "com.apple.screencapture", "key": "location", "title": "Screenshots: save location", "defaultValue": null},

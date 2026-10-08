@@ -112,3 +112,46 @@ private func attribute(_ identifier: String?, program: String? = nil) -> Attribu
     let r = attribute("com.spotify.client")
     #expect(r.status == .orphaned && r.confidence == .high && r.owner?.displayName == "Spotify")
 }
+
+// MARK: Real-machine regressions
+
+private let adobeAE = InstalledApp(
+    bundleID: "com.adobe.AfterEffects", name: "Adobe After Effects 2026", version: nil, teamID: "JQ525L2MZD",
+    isAppleSigned: false, source: .manual, url: URL(fileURLWithPath: "/Applications/Adobe After Effects 2026/Adobe After Effects 2026.app"), lastUsed: nil)
+private let realistic = Attributor(
+    index: AppIndex(apps: [adobeAE]), reference: ReferenceData.bundled,
+    fileExists: { $0 == "/opt/homebrew/bin/brew" })
+
+private func attributeReal(_ id: String) -> Attribution {
+    realistic.attribute(RawFinding(category: .leftovers, kind: .appSupport, name: id, paths: [], identifier: id))
+}
+
+@Test func vendorFolderIsInstalledWhenAnyVendorAppIs() {
+    #expect(attributeReal("Adobe").status == .installed)
+    #expect(attributeReal("com.Adobe.After Effects.26.0").status == .installed)
+}
+
+@Test func homebrewFolderIsInstalledWhenBrewExists() {
+    #expect(attributeReal(".homebrew").status != .orphaned)
+    #expect(attributeReal("Homebrew").status == .installed)
+}
+
+@Test func libraryCachesAreNotAttributedToAnApp() {
+    for id in ["com.crashlytics.data", "com.hackemist.SDImageCache", "org.sparkle-project.DownloaderService", "io.sentry"] {
+        let a = attributeReal(id)
+        #expect(a.status == .unknown, "\(id)")
+        #expect(a.confidence == .low, "\(id)")
+        #expect(a.owner != nil, "\(id)")
+    }
+}
+
+@Test func teamPrefixedAppleGroupsAreApple() {
+    #expect(attributeReal("243LU875E5.groups.com.apple.podcasts").status == .apple)
+    #expect(attributeReal("74J34U3R6X.com.apple.iWork").status == .apple)
+    #expect(attributeReal("systemgroup.com.apple.icloud.searchpartyd.sharedsettings").status == .apple)
+}
+
+@Test func bundleLikeAllowsSpacesAfterVendor() {
+    #expect(Identifier.isBundleLike("com.borisfx.Mocha AE Plugin 2025"))
+    #expect(!Identifier.isBundleLike("com foo.bar.baz"))
+}

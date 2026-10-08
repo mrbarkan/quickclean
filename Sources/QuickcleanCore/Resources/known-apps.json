@@ -1,58 +1,1123 @@
 [
-  {"pattern": "com.alexzielenski", "name": "Mousecape", "bundleID": "com.alexzielenski.Mousecape", "customization": true, "note": "Replaces system cursors (including the beachball) at every login."},
-  {"pattern": "mousecape", "name": "Mousecape", "bundleID": "com.alexzielenski.Mousecape", "customization": true, "note": "Replaces system cursors (including the beachball) at every login."},
-  {"pattern": "com.doomlaser.cursorcerer", "name": "Cursorcerer", "bundleID": "com.doomlaser.cursorcerer", "customization": true, "note": "Hides or changes the mouse cursor."},
-  {"pattern": "cursorcerer", "name": "Cursorcerer", "bundleID": "com.doomlaser.cursorcerer", "customization": true, "note": "Hides or changes the mouse cursor."},
-  {"pattern": "com.surteesstudios", "name": "Bartender", "bundleID": "com.surteesstudios.Bartender", "customization": true, "note": "Rearranges and hides menu bar items."},
-  {"pattern": "bartender", "name": "Bartender", "bundleID": "com.surteesstudios.Bartender", "customization": true, "note": "Rearranges and hides menu bar items."},
-  {"pattern": "com.jordanbaird.ice", "name": "Ice", "bundleID": "com.jordanbaird.Ice", "customization": true, "note": "Hides menu bar items."},
-  {"pattern": "com.dwarvesv.minimalbar", "name": "Hidden Bar", "bundleID": "com.dwarvesv.minimalbar", "customization": true, "note": "Hides menu bar items."},
-  {"pattern": "org.pqrs", "name": "Karabiner-Elements", "bundleID": "org.pqrs.Karabiner-Elements.Settings", "customization": true, "note": "Remaps the keyboard through a driver and background services."},
-  {"pattern": "karabiner", "name": "Karabiner-Elements", "bundleID": "org.pqrs.Karabiner-Elements.Settings", "customization": true, "note": "Remaps the keyboard through a driver and background services."},
-  {"pattern": "com.hegenberg", "name": "BetterTouchTool", "bundleID": "com.hegenberg.BetterTouchTool", "customization": true, "note": "Customizes gestures, shortcuts and the Touch Bar."},
-  {"pattern": "bettertouchtool", "name": "BetterTouchTool", "bundleID": "com.hegenberg.BetterTouchTool", "customization": true, "note": "Customizes gestures, shortcuts and the Touch Bar."},
-  {"pattern": "com.w0lf", "name": "MacForge", "bundleID": "com.w0lf.MacForge", "customization": true, "note": "Injects plugins that modify macOS apps."},
-  {"pattern": "macforge", "name": "MacForge", "bundleID": "com.w0lf.MacForge", "customization": true, "note": "Injects plugins that modify macOS apps."},
-  {"pattern": "simbl", "name": "SIMBL", "bundleID": null, "customization": true, "note": "Legacy plugin loader that modifies macOS apps."},
-  {"pattern": "com.adobe", "name": "Adobe", "bundleID": null, "customization": false, "note": "Adobe apps and Creative Cloud services."},
-  {"pattern": "adobe", "name": "Adobe", "bundleID": null, "customization": false, "note": "Adobe apps and Creative Cloud services."},
-  {"pattern": "com.valvesoftware", "name": "Steam", "bundleID": "com.valvesoftware.steam", "customization": false, "note": "Steam client and games."},
-  {"pattern": "steam", "name": "Steam", "bundleID": "com.valvesoftware.steam", "customization": false, "note": "Steam client and games."},
-  {"pattern": "com.google.keystone", "name": "Google Software Update", "bundleID": null, "customization": false, "note": "Google's updater; often left behind after Chrome is removed."},
-  {"pattern": "com.google.googleupdater", "name": "Google Updater", "bundleID": null, "customization": false, "note": "Google's updater; often left behind after Chrome is removed."},
-  {"pattern": "com.google", "name": "Google", "bundleID": null, "customization": false, "note": "Google apps."},
-  {"pattern": "google", "name": "Google", "bundleID": null, "customization": false, "note": "Google apps."},
-  {"pattern": "com.microsoft.autoupdate", "name": "Microsoft AutoUpdate", "bundleID": "com.microsoft.autoupdate2", "customization": false, "note": "Microsoft's updater; often left behind after Office is removed."},
-  {"pattern": "com.microsoft", "name": "Microsoft", "bundleID": null, "customization": false, "note": "Microsoft apps."},
-  {"pattern": "microsoft", "name": "Microsoft", "bundleID": null, "customization": false, "note": "Microsoft apps."},
-  {"pattern": "us.zoom", "name": "Zoom", "bundleID": "us.zoom.xos", "customization": false, "note": "Zoom meetings."},
-  {"pattern": "zoom.us", "name": "Zoom", "bundleID": "us.zoom.xos", "customization": false, "note": "Zoom meetings."},
-  {"pattern": "com.docker", "name": "Docker", "bundleID": "com.docker.docker", "customization": false, "note": "Docker Desktop and its VM data."},
-  {"pattern": "docker", "name": "Docker", "bundleID": "com.docker.docker", "customization": false, "note": "Docker Desktop and its VM data."},
-  {"pattern": "com.logi", "name": "Logitech", "bundleID": null, "customization": true, "note": "Logitech device software; installs drivers and background agents."},
-  {"pattern": "logitech", "name": "Logitech", "bundleID": null, "customization": true, "note": "Logitech device software; installs drivers and background agents."},
-  {"pattern": "com.spotify", "name": "Spotify", "bundleID": "com.spotify.client", "customization": false, "note": "Spotify music."},
-  {"pattern": "spotify", "name": "Spotify", "bundleID": "com.spotify.client", "customization": false, "note": "Spotify music."},
-  {"pattern": "com.hnc.discord", "name": "Discord", "bundleID": "com.hnc.Discord", "customization": false, "note": "Discord chat."},
-  {"pattern": "discord", "name": "Discord", "bundleID": "com.hnc.Discord", "customization": false, "note": "Discord chat."},
-  {"pattern": "com.epicgames", "name": "Epic Games", "bundleID": null, "customization": false, "note": "Epic Games Launcher and games."},
-  {"pattern": "epic games", "name": "Epic Games", "bundleID": null, "customization": false, "note": "Epic Games Launcher and games."},
-  {"pattern": "com.blizzard", "name": "Battle.net", "bundleID": null, "customization": false, "note": "Blizzard Battle.net and games."},
-  {"pattern": "battle.net", "name": "Battle.net", "bundleID": null, "customization": false, "note": "Blizzard Battle.net and games."},
-  {"pattern": "com.macpaw", "name": "MacPaw (CleanMyMac)", "bundleID": null, "customization": false, "note": "MacPaw apps; CleanMyMac installs a background helper."},
-  {"pattern": "cleanmymac", "name": "MacPaw (CleanMyMac)", "bundleID": null, "customization": false, "note": "MacPaw apps; CleanMyMac installs a background helper."},
-  {"pattern": "com.setapp", "name": "Setapp", "bundleID": "com.setapp.DesktopClient", "customization": false, "note": "Setapp subscription apps."},
-  {"pattern": "setapp", "name": "Setapp", "bundleID": "com.setapp.DesktopClient", "customization": false, "note": "Setapp subscription apps."},
-  {"pattern": "com.jetbrains", "name": "JetBrains", "bundleID": null, "customization": false, "note": "JetBrains IDEs."},
-  {"pattern": "jetbrains", "name": "JetBrains", "bundleID": null, "customization": false, "note": "JetBrains IDEs."},
-  {"pattern": "com.unity3d", "name": "Unity", "bundleID": null, "customization": false, "note": "Unity editor and hub."},
-  {"pattern": "com.parallels", "name": "Parallels", "bundleID": null, "customization": false, "note": "Parallels Desktop; installs system extensions and services."},
-  {"pattern": "com.vmware", "name": "VMware", "bundleID": null, "customization": false, "note": "VMware Fusion; installs system extensions and services."},
-  {"pattern": "com.getdropbox", "name": "Dropbox", "bundleID": "com.getdropbox.dropbox", "customization": false, "note": "Dropbox sync."},
-  {"pattern": "dropbox", "name": "Dropbox", "bundleID": "com.getdropbox.dropbox", "customization": false, "note": "Dropbox sync."},
-  {"pattern": "com.tinyspeck.slackmacgap", "name": "Slack", "bundleID": "com.tinyspeck.slackmacgap", "customization": false, "note": "Slack chat."},
-  {"pattern": "com.raycast", "name": "Raycast", "bundleID": "com.raycast.macos", "customization": false, "note": "Raycast launcher."},
-  {"pattern": "com.runningwithcrayons", "name": "Alfred", "bundleID": null, "customization": false, "note": "Alfred launcher."},
-  {"pattern": "homebrew", "name": "Homebrew", "bundleID": null, "customization": false, "note": "Homebrew package manager."},
-  {"pattern": "ollama", "name": "Ollama", "bundleID": "com.electron.ollama", "customization": false, "note": "Local LLM runtime and models."}
+ {
+  "pattern": "com.alexzielenski",
+  "name": "Mousecape",
+  "bundleID": "com.alexzielenski.Mousecape",
+  "customization": true,
+  "note": "Replaces system cursors (including the beachball) at every login."
+ },
+ {
+  "pattern": "mousecape",
+  "name": "Mousecape",
+  "bundleID": "com.alexzielenski.Mousecape",
+  "customization": true,
+  "note": "Replaces system cursors (including the beachball) at every login."
+ },
+ {
+  "pattern": "com.doomlaser.cursorcerer",
+  "name": "Cursorcerer",
+  "bundleID": "com.doomlaser.cursorcerer",
+  "customization": true,
+  "note": "Hides or changes the mouse cursor."
+ },
+ {
+  "pattern": "cursorcerer",
+  "name": "Cursorcerer",
+  "bundleID": "com.doomlaser.cursorcerer",
+  "customization": true,
+  "note": "Hides or changes the mouse cursor."
+ },
+ {
+  "pattern": "com.surteesstudios",
+  "name": "Bartender",
+  "bundleID": "com.surteesstudios.Bartender",
+  "customization": true,
+  "note": "Rearranges and hides menu bar items."
+ },
+ {
+  "pattern": "bartender",
+  "name": "Bartender",
+  "bundleID": "com.surteesstudios.Bartender",
+  "customization": true,
+  "note": "Rearranges and hides menu bar items."
+ },
+ {
+  "pattern": "com.jordanbaird.ice",
+  "name": "Ice",
+  "bundleID": "com.jordanbaird.Ice",
+  "customization": true,
+  "note": "Hides menu bar items."
+ },
+ {
+  "pattern": "com.dwarvesv.minimalbar",
+  "name": "Hidden Bar",
+  "bundleID": "com.dwarvesv.minimalbar",
+  "customization": true,
+  "note": "Hides menu bar items."
+ },
+ {
+  "pattern": "org.pqrs",
+  "name": "Karabiner-Elements",
+  "bundleID": "org.pqrs.Karabiner-Elements.Settings",
+  "customization": true,
+  "note": "Remaps the keyboard through a driver and background services."
+ },
+ {
+  "pattern": "karabiner",
+  "name": "Karabiner-Elements",
+  "bundleID": "org.pqrs.Karabiner-Elements.Settings",
+  "customization": true,
+  "note": "Remaps the keyboard through a driver and background services."
+ },
+ {
+  "pattern": "com.hegenberg",
+  "name": "BetterTouchTool",
+  "bundleID": "com.hegenberg.BetterTouchTool",
+  "customization": true,
+  "note": "Customizes gestures, shortcuts and the Touch Bar."
+ },
+ {
+  "pattern": "bettertouchtool",
+  "name": "BetterTouchTool",
+  "bundleID": "com.hegenberg.BetterTouchTool",
+  "customization": true,
+  "note": "Customizes gestures, shortcuts and the Touch Bar."
+ },
+ {
+  "pattern": "com.w0lf",
+  "name": "MacForge",
+  "bundleID": "com.w0lf.MacForge",
+  "customization": true,
+  "note": "Injects plugins that modify macOS apps."
+ },
+ {
+  "pattern": "macforge",
+  "name": "MacForge",
+  "bundleID": "com.w0lf.MacForge",
+  "customization": true,
+  "note": "Injects plugins that modify macOS apps."
+ },
+ {
+  "pattern": "simbl",
+  "name": "SIMBL",
+  "bundleID": null,
+  "customization": true,
+  "note": "Legacy plugin loader that modifies macOS apps."
+ },
+ {
+  "pattern": "com.adobe",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "adobe",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "com.valvesoftware",
+  "name": "Steam",
+  "bundleID": "com.valvesoftware.steam",
+  "customization": false,
+  "note": "Steam client and games."
+ },
+ {
+  "pattern": "steam",
+  "name": "Steam",
+  "bundleID": "com.valvesoftware.steam",
+  "customization": false,
+  "note": "Steam client and games."
+ },
+ {
+  "pattern": "com.google.keystone",
+  "name": "Google Software Update",
+  "bundleID": null,
+  "customization": false,
+  "note": "Google's updater; often left behind after Chrome is removed."
+ },
+ {
+  "pattern": "com.google.googleupdater",
+  "name": "Google Updater",
+  "bundleID": null,
+  "customization": false,
+  "note": "Google's updater; often left behind after Chrome is removed."
+ },
+ {
+  "pattern": "com.google",
+  "name": "Google",
+  "bundleID": null,
+  "customization": false,
+  "note": "Google apps."
+ },
+ {
+  "pattern": "google",
+  "name": "Google",
+  "bundleID": null,
+  "customization": false,
+  "note": "Google apps."
+ },
+ {
+  "pattern": "com.microsoft.autoupdate",
+  "name": "Microsoft AutoUpdate",
+  "bundleID": "com.microsoft.autoupdate2",
+  "customization": false,
+  "note": "Microsoft's updater; often left behind after Office is removed."
+ },
+ {
+  "pattern": "com.microsoft",
+  "name": "Microsoft",
+  "bundleID": null,
+  "customization": false,
+  "note": "Microsoft apps."
+ },
+ {
+  "pattern": "microsoft",
+  "name": "Microsoft",
+  "bundleID": null,
+  "customization": false,
+  "note": "Microsoft apps."
+ },
+ {
+  "pattern": "us.zoom",
+  "name": "Zoom",
+  "bundleID": "us.zoom.xos",
+  "customization": false,
+  "note": "Zoom meetings."
+ },
+ {
+  "pattern": "zoom.us",
+  "name": "Zoom",
+  "bundleID": "us.zoom.xos",
+  "customization": false,
+  "note": "Zoom meetings."
+ },
+ {
+  "pattern": "com.docker",
+  "name": "Docker",
+  "bundleID": "com.docker.docker",
+  "customization": false,
+  "note": "Docker Desktop and its VM data."
+ },
+ {
+  "pattern": "docker",
+  "name": "Docker",
+  "bundleID": "com.docker.docker",
+  "customization": false,
+  "note": "Docker Desktop and its VM data."
+ },
+ {
+  "pattern": "com.logi",
+  "name": "Logitech",
+  "bundleID": null,
+  "customization": true,
+  "note": "Logitech device software; installs drivers and background agents."
+ },
+ {
+  "pattern": "logitech",
+  "name": "Logitech",
+  "bundleID": null,
+  "customization": true,
+  "note": "Logitech device software; installs drivers and background agents."
+ },
+ {
+  "pattern": "com.spotify",
+  "name": "Spotify",
+  "bundleID": "com.spotify.client",
+  "customization": false,
+  "note": "Spotify music."
+ },
+ {
+  "pattern": "spotify",
+  "name": "Spotify",
+  "bundleID": "com.spotify.client",
+  "customization": false,
+  "note": "Spotify music."
+ },
+ {
+  "pattern": "com.hnc.discord",
+  "name": "Discord",
+  "bundleID": "com.hnc.Discord",
+  "customization": false,
+  "note": "Discord chat."
+ },
+ {
+  "pattern": "discord",
+  "name": "Discord",
+  "bundleID": "com.hnc.Discord",
+  "customization": false,
+  "note": "Discord chat."
+ },
+ {
+  "pattern": "com.epicgames",
+  "name": "Epic Games",
+  "bundleID": null,
+  "customization": false,
+  "note": "Epic Games Launcher and games."
+ },
+ {
+  "pattern": "epic games",
+  "name": "Epic Games",
+  "bundleID": null,
+  "customization": false,
+  "note": "Epic Games Launcher and games."
+ },
+ {
+  "pattern": "com.blizzard",
+  "name": "Battle.net",
+  "bundleID": null,
+  "customization": false,
+  "note": "Blizzard Battle.net and games."
+ },
+ {
+  "pattern": "battle.net",
+  "name": "Battle.net",
+  "bundleID": null,
+  "customization": false,
+  "note": "Blizzard Battle.net and games."
+ },
+ {
+  "pattern": "com.macpaw",
+  "name": "MacPaw (CleanMyMac)",
+  "bundleID": null,
+  "customization": false,
+  "note": "MacPaw apps; CleanMyMac installs a background helper."
+ },
+ {
+  "pattern": "cleanmymac",
+  "name": "MacPaw (CleanMyMac)",
+  "bundleID": null,
+  "customization": false,
+  "note": "MacPaw apps; CleanMyMac installs a background helper."
+ },
+ {
+  "pattern": "com.setapp",
+  "name": "Setapp",
+  "bundleID": "com.setapp.DesktopClient",
+  "customization": false,
+  "note": "Setapp subscription apps."
+ },
+ {
+  "pattern": "setapp",
+  "name": "Setapp",
+  "bundleID": "com.setapp.DesktopClient",
+  "customization": false,
+  "note": "Setapp subscription apps."
+ },
+ {
+  "pattern": "com.jetbrains",
+  "name": "JetBrains",
+  "bundleID": null,
+  "customization": false,
+  "note": "JetBrains IDEs."
+ },
+ {
+  "pattern": "jetbrains",
+  "name": "JetBrains",
+  "bundleID": null,
+  "customization": false,
+  "note": "JetBrains IDEs."
+ },
+ {
+  "pattern": "com.unity3d",
+  "name": "Unity",
+  "bundleID": null,
+  "customization": false,
+  "note": "Unity editor and hub."
+ },
+ {
+  "pattern": "com.parallels",
+  "name": "Parallels",
+  "bundleID": null,
+  "customization": false,
+  "note": "Parallels Desktop; installs system extensions and services."
+ },
+ {
+  "pattern": "com.vmware",
+  "name": "VMware",
+  "bundleID": null,
+  "customization": false,
+  "note": "VMware Fusion; installs system extensions and services."
+ },
+ {
+  "pattern": "com.getdropbox",
+  "name": "Dropbox",
+  "bundleID": "com.getdropbox.dropbox",
+  "customization": false,
+  "note": "Dropbox sync."
+ },
+ {
+  "pattern": "dropbox",
+  "name": "Dropbox",
+  "bundleID": "com.getdropbox.dropbox",
+  "customization": false,
+  "note": "Dropbox sync."
+ },
+ {
+  "pattern": "com.tinyspeck.slackmacgap",
+  "name": "Slack",
+  "bundleID": "com.tinyspeck.slackmacgap",
+  "customization": false,
+  "note": "Slack chat."
+ },
+ {
+  "pattern": "com.raycast",
+  "name": "Raycast",
+  "bundleID": "com.raycast.macos",
+  "customization": false,
+  "note": "Raycast launcher."
+ },
+ {
+  "pattern": "com.runningwithcrayons",
+  "name": "Alfred",
+  "bundleID": null,
+  "customization": false,
+  "note": "Alfred launcher."
+ },
+ {
+  "pattern": "homebrew",
+  "name": "Homebrew",
+  "bundleID": null,
+  "customization": false,
+  "note": "Homebrew package manager.",
+  "installedPaths": [
+   "/opt/homebrew/bin/brew",
+   "/usr/local/bin/brew"
+  ]
+ },
+ {
+  "pattern": "ollama",
+  "name": "Ollama",
+  "bundleID": "com.electron.ollama",
+  "customization": false,
+  "note": "Local LLM runtime and models."
+ },
+ {
+  "pattern": "com.crashlytics",
+  "name": "Crashlytics",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "crashlytics",
+  "name": "Crashlytics",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.hackemist",
+  "name": "SDWebImage",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.onevcat",
+  "name": "Kingfisher",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.plausiblelabs",
+  "name": "PLCrashReporter",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "org.sparkle-project",
+  "name": "Sparkle updater",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "sparkle",
+  "name": "Sparkle updater",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.breakpad",
+  "name": "Breakpad crash reporter",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "breakpad",
+  "name": "Breakpad crash reporter",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.juce",
+  "name": "JUCE audio framework",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.electron",
+  "name": "Electron",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "electron",
+  "name": "Electron",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "io.sentry",
+  "name": "Sentry crash reporter",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "sentry",
+  "name": "Sentry crash reporter",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "sentrycrash",
+  "name": "Sentry crash reporter",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.firebase",
+  "name": "Firebase",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "firebase",
+  "name": "Firebase",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "google-heartbeat-storage",
+  "name": "Firebase",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.segment",
+  "name": "Segment analytics",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "segment",
+  "name": "Segment analytics",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.telemetrydeck",
+  "name": "TelemetryDeck analytics",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "io.branch",
+  "name": "Branch analytics",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "statsig-cache",
+  "name": "Statsig",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.datadoghq",
+  "name": "Datadog",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "cef",
+  "name": "Chromium Embedded Framework",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "jna",
+  "name": "Java Native Access",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "javacpp",
+  "name": "JavaCPP",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "hawtjni",
+  "name": "HawtJNI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "com.qtproject",
+  "name": "Qt framework",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "apmanalyticssuitename",
+  "name": "Firebase",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "apmexperimentsuitename",
+  "name": "Firebase",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "cctclearcutlogger",
+  "name": "Google Clearcut logger",
+  "bundleID": null,
+  "customization": false,
+  "note": "a component many apps embed.",
+  "library": true
+ },
+ {
+  "pattern": "org.swift",
+  "name": "Swift toolchain",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "swift-frontend",
+  "name": "Swift toolchain",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "swift-package",
+  "name": "Swift Package Manager",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "com.vercel.cli",
+  "name": "Vercel CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "claude-cli-nodejs",
+  "name": "Claude Code CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "prisma-dev-nodejs",
+  "name": "Prisma CLI",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "ms-playwright-go",
+  "name": "Playwright",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "ms-playwright",
+  "name": "Playwright",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "mise",
+  "name": "mise",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "pyinstaller",
+  "name": "PyInstaller",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "numba",
+  "name": "Numba",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "kotlin",
+  "name": "Kotlin",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "main.kts.compiled.cache",
+  "name": "Kotlin",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "net.java.openjdk",
+  "name": "Java",
+  "bundleID": null,
+  "customization": false,
+  "note": "a command-line tool.",
+  "library": true
+ },
+ {
+  "pattern": "creative cloud",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "creativecloud",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "creative cloud libraries synchronizer",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "csxs",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "ngl",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "coresyncinstall",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "adobegc",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "acrosyncngllog",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "regid.1986-12.com.adobe",
+  "name": "Adobe",
+  "bundleID": null,
+  "customization": false,
+  "note": "Adobe apps and Creative Cloud services."
+ },
+ {
+  "pattern": "com.borisfx",
+  "name": "Boris FX",
+  "bundleID": null,
+  "customization": false,
+  "note": "Boris FX."
+ },
+ {
+  "pattern": "borisfx",
+  "name": "Boris FX",
+  "bundleID": null,
+  "customization": false,
+  "note": "Boris FX."
+ },
+ {
+  "pattern": "genarts",
+  "name": "Boris FX",
+  "bundleID": null,
+  "customization": false,
+  "note": "Boris FX."
+ },
+ {
+  "pattern": "com.blackmagic-design",
+  "name": "Blackmagic Design",
+  "bundleID": null,
+  "customization": false,
+  "note": "Blackmagic Design."
+ },
+ {
+  "pattern": "blackmagic design",
+  "name": "Blackmagic Design",
+  "bundleID": null,
+  "customization": false,
+  "note": "Blackmagic Design."
+ },
+ {
+  "pattern": "davinci resolve",
+  "name": "Blackmagic Design",
+  "bundleID": null,
+  "customization": false,
+  "note": "Blackmagic Design."
+ },
+ {
+  "pattern": "logi",
+  "name": "Logitech",
+  "bundleID": null,
+  "customization": true,
+  "note": "Logitech device software; installs drivers and background agents."
+ },
+ {
+  "pattern": "logipluginservice",
+  "name": "Logitech",
+  "bundleID": null,
+  "customization": true,
+  "note": "Logitech device software; installs drivers and background agents."
+ },
+ {
+  "pattern": "notion",
+  "name": "Notion",
+  "bundleID": "notion.id",
+  "customization": false,
+  "note": "Notion."
+ },
+ {
+  "pattern": "notion.id",
+  "name": "Notion",
+  "bundleID": "notion.id",
+  "customization": false,
+  "note": "Notion."
+ },
+ {
+  "pattern": "org.mozilla",
+  "name": "Firefox",
+  "bundleID": "org.mozilla.firefox",
+  "customization": false,
+  "note": "Firefox."
+ },
+ {
+  "pattern": "mozilla",
+  "name": "Firefox",
+  "bundleID": "org.mozilla.firefox",
+  "customization": false,
+  "note": "Firefox."
+ },
+ {
+  "pattern": "com.brave",
+  "name": "Brave",
+  "bundleID": "com.brave.Browser",
+  "customization": false,
+  "note": "Brave."
+ },
+ {
+  "pattern": "bravesoftware",
+  "name": "Brave",
+  "bundleID": "com.brave.Browser",
+  "customization": false,
+  "note": "Brave."
+ },
+ {
+  "pattern": "com.vivaldi",
+  "name": "Vivaldi",
+  "bundleID": "com.vivaldi.Vivaldi",
+  "customization": false,
+  "note": "Vivaldi."
+ },
+ {
+  "pattern": "vivaldi",
+  "name": "Vivaldi",
+  "bundleID": "com.vivaldi.Vivaldi",
+  "customization": false,
+  "note": "Vivaldi."
+ },
+ {
+  "pattern": "company.thebrowser",
+  "name": "Arc",
+  "bundleID": "company.thebrowser.Browser",
+  "customization": false,
+  "note": "Arc."
+ },
+ {
+  "pattern": "arc",
+  "name": "Arc",
+  "bundleID": "company.thebrowser.Browser",
+  "customization": false,
+  "note": "Arc."
+ },
+ {
+  "pattern": "org.chromium",
+  "name": "Chromium",
+  "bundleID": "org.chromium.Chromium",
+  "customization": false,
+  "note": "Chromium."
+ },
+ {
+  "pattern": "chromium",
+  "name": "Chromium",
+  "bundleID": "org.chromium.Chromium",
+  "customization": false,
+  "note": "Chromium."
+ },
+ {
+  "pattern": "com.openai",
+  "name": "ChatGPT",
+  "bundleID": "com.openai.chat",
+  "customization": false,
+  "note": "ChatGPT."
+ },
+ {
+  "pattern": "openai",
+  "name": "ChatGPT",
+  "bundleID": "com.openai.chat",
+  "customization": false,
+  "note": "ChatGPT."
+ },
+ {
+  "pattern": "chatgpthelper",
+  "name": "ChatGPT",
+  "bundleID": "com.openai.chat",
+  "customization": false,
+  "note": "ChatGPT."
+ },
+ {
+  "pattern": "codex",
+  "name": "Codex",
+  "bundleID": "com.openai.codex",
+  "customization": false,
+  "note": "Codex."
+ },
+ {
+  "pattern": "code",
+  "name": "Visual Studio Code",
+  "bundleID": "com.microsoft.VSCode",
+  "customization": false,
+  "note": "Visual Studio Code."
+ },
+ {
+  "pattern": "com.toggl",
+  "name": "Toggl Track",
+  "bundleID": "com.toggl.daneel",
+  "customization": false,
+  "note": "Toggl Track."
+ },
+ {
+  "pattern": "toggl",
+  "name": "Toggl Track",
+  "bundleID": "com.toggl.daneel",
+  "customization": false,
+  "note": "Toggl Track."
+ },
+ {
+  "pattern": "org.libreoffice",
+  "name": "LibreOffice",
+  "bundleID": "org.libreoffice.script",
+  "customization": false,
+  "note": "LibreOffice."
+ },
+ {
+  "pattern": "libreoffice",
+  "name": "LibreOffice",
+  "bundleID": "org.libreoffice.script",
+  "customization": false,
+  "note": "LibreOffice."
+ },
+ {
+  "pattern": "md.obsidian",
+  "name": "Obsidian",
+  "bundleID": "md.obsidian",
+  "customization": false,
+  "note": "Obsidian."
+ },
+ {
+  "pattern": "com.paragon-software",
+  "name": "Paragon Software",
+  "bundleID": null,
+  "customization": false,
+  "note": "Paragon Software."
+ },
+ {
+  "pattern": "paragon software",
+  "name": "Paragon Software",
+  "bundleID": null,
+  "customization": false,
+  "note": "Paragon Software."
+ },
+ {
+  "pattern": "com.aeroquartet",
+  "name": "Treasured",
+  "bundleID": "com.aeroquartet.Treasured",
+  "customization": false,
+  "note": "Treasured."
+ },
+ {
+  "pattern": "treasured",
+  "name": "Treasured",
+  "bundleID": "com.aeroquartet.Treasured",
+  "customization": false,
+  "note": "Treasured."
+ },
+ {
+  "pattern": "com.productioncrate",
+  "name": "ProductionCrate",
+  "bundleID": null,
+  "customization": false,
+  "note": "ProductionCrate."
+ },
+ {
+  "pattern": "productioncrate",
+  "name": "ProductionCrate",
+  "bundleID": null,
+  "customization": false,
+  "note": "ProductionCrate."
+ },
+ {
+  "pattern": "com.duckduckgo",
+  "name": "DuckDuckGo",
+  "bundleID": "com.duckduckgo.macos.browser",
+  "customization": false,
+  "note": "DuckDuckGo."
+ },
+ {
+  "pattern": "duckainativestorage",
+  "name": "DuckDuckGo",
+  "bundleID": "com.duckduckgo.macos.browser",
+  "customization": false,
+  "note": "DuckDuckGo."
+ },
+ {
+  "pattern": "larkshell",
+  "name": "Lark",
+  "bundleID": "com.electron.lark",
+  "customization": false,
+  "note": "Lark."
+ },
+ {
+  "pattern": "4kdownload.com",
+  "name": "4K Download",
+  "bundleID": null,
+  "customization": false,
+  "note": "4K Download."
+ },
+ {
+  "pattern": "com.4kdownload",
+  "name": "4K Download",
+  "bundleID": null,
+  "customization": false,
+  "note": "4K Download."
+ },
+ {
+  "pattern": "stremio",
+  "name": "Stremio",
+  "bundleID": "com.stremio.stremio-shell-macos",
+  "customization": false,
+  "note": "Stremio."
+ }
 ]

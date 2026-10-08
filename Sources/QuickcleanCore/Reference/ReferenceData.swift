@@ -76,14 +76,25 @@ public struct KnownApp: Codable, Sendable, Equatable {
     /// True when the app changes how macOS looks or behaves.
     public var customization: Bool
     public var note: String
+    /// A framework or command-line tool many apps embed: its data can't be tied to one app.
+    public var library: Bool?
+    /// For non-app software (e.g. Homebrew): installed when any of these paths exists.
+    public var installedPaths: [String]?
 
-    public init(pattern: String, name: String, bundleID: String?, customization: Bool, note: String) {
+    public init(
+        pattern: String, name: String, bundleID: String?, customization: Bool, note: String,
+        library: Bool? = nil, installedPaths: [String]? = nil
+    ) {
         self.pattern = pattern
         self.name = name
         self.bundleID = bundleID
         self.customization = customization
         self.note = note
+        self.library = library
+        self.installedPaths = installedPaths
     }
+
+    public var isLibrary: Bool { library == true }
 }
 
 public struct ReferenceData: Sendable {

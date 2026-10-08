@@ -62,3 +62,9 @@ func byteFormat(bytes: Int64, expected: String) {
 }
 
 @Test func byteFormatNil() { #expect(ByteFormat.string(nil) == "—") }
+
+@Test func overviewListsChangedSettings() {
+    let setting = finding("s", .settings, .settingsKey, owner: "macOS", status: .apple, size: nil, risk: .protected)
+    let o = Overview(findings: sample + [setting], reference: .bundled)
+    #expect(o.changedSettings.map(\.id) == ["s"])
+}

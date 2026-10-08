@@ -17,6 +17,8 @@ public struct Overview: Sendable {
     /// Third-party items that still change how macOS looks or behaves.
     public var customizations: [Finding] = []
     public var topOrphanOwners: [OwnerTotal] = []
+    /// macOS settings that differ from a clean install.
+    public var changedSettings: [Finding] = []
 
     static let behaviorKinds: Set<Kind> = [
         .inputMethod, .preferencePane, .screenSaver, .mailBundle, .safariExtension, .internetPlugin, .kext,
@@ -34,6 +36,7 @@ public struct Overview: Sendable {
                 owners[name, default: OwnerTotal(name: name, count: 0, bytes: 0)].count += 1
                 owners[name, default: OwnerTotal(name: name, count: 0, bytes: 0)].bytes += f.size ?? 0
             }
+            if f.kind == .settingsKey { changedSettings.append(f) }
             let byOwner = f.owner.map { customizingNames.contains($0.displayName) } ?? false
             if f.ownerStatus != .apple, f.risk != .protected, f.category != .apps,
                byOwner || Self.behaviorKinds.contains(f.kind) {
@@ -72,6 +75,11 @@ public struct Report: Codable, Sendable {
         if !overview.customizations.isEmpty {
             md += "## Customizations still active\n\n"
             for f in overview.customizations { md += "- **\(f.title)** — \(f.explanation)\n" }
+            md += "\n"
+        }
+        if !overview.changedSettings.isEmpty {
+            md += "## Changed macOS settings\n\n"
+            for f in overview.changedSettings { md += "- **\(f.title)** — \(f.explanation)\n" }
             md += "\n"
         }
         for category in ScanCategory.allCases {

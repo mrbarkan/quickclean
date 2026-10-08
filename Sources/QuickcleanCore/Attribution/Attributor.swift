@@ -31,13 +31,20 @@ public struct Attributor: Sendable {
         }
         if let program = raw.programPath, let a = byProgram(program) { return a }
 
-        var id = Identifier.strip(raw.identifier ?? raw.name)
-        if id.lowercased().hasPrefix("group.") { id = String(id.dropFirst(6)) }
+        var id = Self.dropGroupPrefix(Identifier.strip(raw.identifier ?? raw.name))
+        while id.hasPrefix(".") { id.removeFirst() }
 
         if let a = apple(id) { return a }
-        if let (team, rest) = Identifier.teamPrefix(id) { return byTeam(team, rest: rest) }
+        if let (team, rest) = Identifier.teamPrefix(id) { return byTeam(team, rest: Self.dropGroupPrefix(rest)) }
         if Identifier.isBundleLike(id) { return byBundleID(id) }
         return byName(id)
+    }
+
+    private static func dropGroupPrefix(_ id: String) -> String {
+        for prefix in ["systemgroup.", "groups.", "group."] where id.lowercased().hasPrefix(prefix) {
+            return String(id.dropFirst(prefix.count))
+        }
+        return id
     }
 
     // MARK: Rules
@@ -65,6 +72,7 @@ public struct Attributor: Sendable {
     }
 
     private func byTeam(_ team: String, rest: String) -> Attribution {
+        if let a = apple(rest) { return a }
         if let app = index.app(bundleID: rest) {
             return installed(app, .high, Evidence(rule: "exactBundleID", detail: "Named after \(app.bundleID)."))
         }
@@ -89,9 +97,8 @@ public struct Attributor: Sendable {
                 evidence: [Evidence(rule: "launchServices", detail: "macOS knows an app with this ID at \(url.path).")])
         }
         let known = reference.knownApp(for: id)
-        if let known, let installedApp = known.bundleID.flatMap(index.app(bundleID:)) {
-            return installed(installedApp, .medium, Evidence(rule: "knownApp", detail: "Matches the known pattern for \(known.name)."))
-        }
+        if let known, known.isLibrary { return library(known) }
+        if let known, let a = installedKnown(known) { return a }
         if let vendor = Identifier.vendorPrefix(id), let app = index.app(vendorPrefix: vendor) {
             return installed(app, .medium, Evidence(rule: "vendorPrefix", detail: "Same developer prefix (\(vendor)) as \(app.name)."))
         }
@@ -109,9 +116,8 @@ public struct Attributor: Sendable {
 
     private func byName(_ name: String) -> Attribution {
         if let known = reference.knownApp(for: name) {
-            if let app = known.bundleID.flatMap(index.app(bundleID:)) ?? index.app(nameToken: known.name) {
-                return installed(app, .medium, Evidence(rule: "knownApp", detail: "Matches the known pattern for \(known.name)."))
-            }
+            if known.isLibrary { return library(known) }
+            if let a = installedKnown(known) { return a }
             return Attribution(
                 owner: Owner(bundleID: known.bundleID, displayName: known.name, teamID: nil), status: .orphaned,
                 confidence: .medium,
@@ -122,6 +128,30 @@ public struct Attributor: Sendable {
         }
         return Attribution(owner: nil, status: .unknown, confidence: .none,
                            evidence: [Evidence(rule: "noMatch", detail: "No installed app, known app or macOS component matches “\(name)”.")])
+    }
+
+    /// A known app counts as installed when its own app, any app from the same vendor, or its tool is present.
+    private func installedKnown(_ known: KnownApp) -> Attribution? {
+        let evidence = Evidence(rule: "knownApp", detail: "Matches the known pattern for \(known.name).")
+        if let app = known.bundleID.flatMap(index.app(bundleID:)) { return installed(app, .medium, evidence) }
+        for k in reference.knownApps where k.name == known.name {
+            if let path = k.installedPaths?.first(where: fileExists) {
+                return Attribution(
+                    owner: Owner(bundleID: nil, displayName: known.name, teamID: nil), status: .installed, confidence: .medium,
+                    evidence: [evidence, Evidence(rule: "toolPresent", detail: "\(known.name) is installed at \(path).")])
+            }
+            let app = Identifier.isBundleLike(k.pattern + ".x")
+                ? index.app(vendorPrefix: k.pattern)
+                : index.apps.first { Identifier.normalize($0.name).hasPrefix(Identifier.normalize(k.pattern)) }
+            if let app { return installed(app, .medium, evidence) }
+        }
+        return nil
+    }
+
+    private func library(_ known: KnownApp) -> Attribution {
+        Attribution(
+            owner: Owner(bundleID: nil, displayName: known.name, teamID: nil), status: .unknown, confidence: .low,
+            evidence: [Evidence(rule: "sharedComponent", detail: "Created by \(known.name), \(known.note) It can't be tied to one app.")])
     }
 
     private func installed(_ app: InstalledApp, _ confidence: Confidence, _ evidence: Evidence) -> Attribution {
