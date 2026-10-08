@@ -64,7 +64,8 @@ locationaccessstored homeenergyd contactsd corespotlightd diagnostics_agent embe
 keychains metadata appstore assistant assistants autosave information
 """.split()
 names.update(n.lower() for n in manual)
-names.update({"desktop pictures", "app store", "script editor"})
+names.update({"desktop pictures", "app store", "script editor", "black & white", "blue tone", "gray tone",
+              "lab tone", "sepia tone", "websafecolors"})
 # Apple-internal names that third-party software also uses for its own folders.
 names -= {"sentry", "caches", "purge", "default.store", "profiles", "ambientsettingstests"}
 # Generic words that third-party products also use for their folders.

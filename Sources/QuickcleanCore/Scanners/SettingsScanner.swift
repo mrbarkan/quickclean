@@ -16,7 +16,9 @@ public struct SettingsScanner: Scanner {
             for setting in byDomain[domain] ?? [] {
                 guard let raw = values[setting.key] else { continue }
                 let current = JSONValue(any: raw)
-                if setting.defaultValue != .null, current == setting.defaultValue { continue }
+                if setting.defaultValue != .null, current?.sameSetting(as: setting.defaultValue) == true { continue }
+                // With automatic appearance, macOS writes Dark every evening by itself.
+                if setting.key == "AppleInterfaceStyle", values["AppleInterfaceStyleSwitchesAutomatically"] as? Bool == true { continue }
                 let shown = current?.display ?? "customized"
                 let defaultShown = setting.defaultValue.display
                 var detail = "\(domain) › \(setting.key) is \(shown); macOS default is \(defaultShown)."

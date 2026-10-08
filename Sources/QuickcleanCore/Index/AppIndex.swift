@@ -70,26 +70,25 @@ public enum AppIndexBuilder {
         return AppIndex(apps: apps)
     }
 
-    /// `.app` bundles in `root` and one level of plain subfolders.
-    private static func candidates(in root: URL) -> [URL] {
+    /// `.app` bundles in `root` and its plain subfolders, up to `depth` levels; never inside packages.
+    private static func candidates(in root: URL, depth: Int = 3) -> [URL] {
         let fm = FileManager.default
         guard let children = try? fm.contentsOfDirectory(at: root, includingPropertiesForKeys: [.isDirectoryKey, .isSymbolicLinkKey]) else { return [] }
         var result: [URL] = []
-        for child in children {
+        for child in children.sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) {
             if child.pathExtension == "app" { result.append(child); continue }
             let values = try? child.resourceValues(forKeys: [.isDirectoryKey, .isSymbolicLinkKey])
-            guard values?.isDirectory == true, values?.isSymbolicLink != true else { continue }
-            let nested = (try? fm.contentsOfDirectory(at: child, includingPropertiesForKeys: nil)) ?? []
-            result += nested.filter { $0.pathExtension == "app" }
+            guard depth > 1, child.pathExtension.isEmpty, values?.isDirectory == true, values?.isSymbolicLink != true else { continue }
+            result += candidates(in: child, depth: depth - 1)
         }
         return result
     }
 
     private static func inspect(_ url: URL, env: ScanEnvironment, reference: ReferenceData, caskApps: Set<String>) -> InstalledApp? {
-        guard let info = NSDictionary(contentsOf: url.appending(path: "Contents/Info.plist")),
-              let bundleID = info["CFBundleIdentifier"] as? String
-        else { return nil }
+        guard let info = NSDictionary(contentsOf: url.appending(path: "Contents/Info.plist")) else { return nil }
         let fileName = url.deletingPathExtension().lastPathComponent
+        // Some launchers (Steam game shortcuts) ship no bundle ID; give them a private one.
+        let bundleID = info["CFBundleIdentifier"] as? String ?? "local.unidentified.\(Identifier.normalize(fileName))"
         let name = (info["CFBundleDisplayName"] as? String) ?? (info["CFBundleName"] as? String) ?? fileName
         let signature = env.bundles.signature(of: url)
         let source: AppSource =

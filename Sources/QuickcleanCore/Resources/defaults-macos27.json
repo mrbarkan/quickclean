@@ -1,37 +1,276 @@
 [
-  {"domain": "com.apple.dock", "key": "autohide", "title": "Dock: automatically hide", "defaultValue": false},
-  {"domain": "com.apple.dock", "key": "orientation", "title": "Dock: position on screen", "defaultValue": "bottom"},
-  {"domain": "com.apple.dock", "key": "magnification", "title": "Dock: magnification", "defaultValue": false},
-  {"domain": "com.apple.dock", "key": "show-recents", "title": "Dock: show suggested and recent apps", "defaultValue": true},
-  {"domain": "com.apple.dock", "key": "mineffect", "title": "Dock: minimize effect", "defaultValue": "genie"},
-  {"domain": "com.apple.dock", "key": "static-only", "title": "Dock: show only open apps", "defaultValue": false},
-  {"domain": "com.apple.dock", "key": "minimize-to-application", "title": "Dock: minimize into app icon", "defaultValue": false},
-  {"domain": "com.apple.dock", "key": "autohide-delay", "title": "Dock: auto-hide delay (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.dock", "key": "autohide-time-modifier", "title": "Dock: auto-hide animation speed (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.dock", "key": "showhidden", "title": "Dock: dim hidden apps (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.dock", "key": "expose-animation-duration", "title": "Mission Control: animation speed (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.finder", "key": "AppleShowAllFiles", "title": "Finder: show hidden files", "defaultValue": null},
-  {"domain": "com.apple.finder", "key": "ShowPathbar", "title": "Finder: show path bar", "defaultValue": false},
-  {"domain": "com.apple.finder", "key": "ShowStatusBar", "title": "Finder: show status bar", "defaultValue": false},
-  {"domain": "com.apple.finder", "key": "_FXShowPosixPathInTitle", "title": "Finder: full path in window title (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.finder", "key": "FXEnableExtensionChangeWarning", "title": "Finder: warn before changing an extension", "defaultValue": true},
-  {"domain": "com.apple.finder", "key": "QuitMenuItem", "title": "Finder: Quit menu item (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.finder", "key": "CreateDesktop", "title": "Finder: show desktop icons (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.finder", "key": "DisableAllAnimations", "title": "Finder: disable animations (hidden tweak)", "defaultValue": null},
-  {"domain": "NSGlobalDomain", "key": "AppleShowAllExtensions", "title": "Show all filename extensions", "defaultValue": false},
-  {"domain": "NSGlobalDomain", "key": "KeyRepeat", "title": "Keyboard: key repeat rate", "defaultValue": null, "note": "Values below the System Settings minimum can only be set from the command line."},
-  {"domain": "NSGlobalDomain", "key": "InitialKeyRepeat", "title": "Keyboard: delay until repeat", "defaultValue": null},
-  {"domain": "NSGlobalDomain", "key": "ApplePressAndHoldEnabled", "title": "Keyboard: press-and-hold accent menu (hidden tweak)", "defaultValue": null},
-  {"domain": "NSGlobalDomain", "key": "NSAutomaticSpellingCorrectionEnabled", "title": "Text: correct spelling automatically", "defaultValue": null},
-  {"domain": "NSGlobalDomain", "key": "NSWindowResizeTime", "title": "Window resize animation speed (hidden tweak)", "defaultValue": null},
-  {"domain": "NSGlobalDomain", "key": "NSAutomaticWindowAnimationsEnabled", "title": "Window opening animations (hidden tweak)", "defaultValue": null},
-  {"domain": "NSGlobalDomain", "key": "AppleInterfaceStyle", "title": "Appearance: dark mode", "defaultValue": null},
-  {"domain": "com.apple.universalaccess", "key": "cursorIsCustomized", "title": "Pointer: custom outline or fill color", "defaultValue": null, "note": "Set when the pointer outline or fill color was changed. To undo it now: System Settings › Accessibility › Display › Pointer › Reset."},
-  {"domain": "com.apple.universalaccess", "key": "mouseDriverCursorSize", "title": "Pointer: size", "defaultValue": null},
-  {"domain": "com.apple.universalaccess", "key": "reduceMotion", "title": "Accessibility: reduce motion", "defaultValue": null},
-  {"domain": "com.apple.screencapture", "key": "location", "title": "Screenshots: save location", "defaultValue": null},
-  {"domain": "com.apple.screencapture", "key": "type", "title": "Screenshots: file format (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.screencapture", "key": "disable-shadow", "title": "Screenshots: window shadow (hidden tweak)", "defaultValue": null},
-  {"domain": "com.apple.LaunchServices", "key": "LSQuarantine", "title": "Gatekeeper: “downloaded from the internet” prompt (hidden tweak)", "defaultValue": null, "note": "Turning this off weakens a macOS safety check."},
-  {"domain": "com.apple.desktopservices", "key": "DSDontWriteNetworkStores", "title": "Finder: no .DS_Store on network drives (hidden tweak)", "defaultValue": null}
+ {
+  "domain": "com.apple.dock",
+  "key": "autohide",
+  "title": "Dock: automatically hide",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "orientation",
+  "title": "Dock: position on screen",
+  "defaultValue": "bottom"
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "magnification",
+  "title": "Dock: magnification",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "show-recents",
+  "title": "Dock: show suggested and recent apps",
+  "defaultValue": true
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "mineffect",
+  "title": "Dock: minimize effect",
+  "defaultValue": "genie"
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "static-only",
+  "title": "Dock: show only open apps",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "minimize-to-application",
+  "title": "Dock: minimize into app icon",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "autohide-delay",
+  "title": "Dock: auto-hide delay (hidden tweak)",
+  "defaultValue": null
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "autohide-time-modifier",
+  "title": "Dock: auto-hide animation speed (hidden tweak)",
+  "defaultValue": null
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "showhidden",
+  "title": "Dock: dim hidden apps (hidden tweak)",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "expose-animation-duration",
+  "title": "Mission Control: animation speed (hidden tweak)",
+  "defaultValue": null
+ },
+ {
+  "domain": "com.apple.finder",
+  "key": "AppleShowAllFiles",
+  "title": "Finder: show hidden files",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.finder",
+  "key": "ShowPathbar",
+  "title": "Finder: show path bar",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.finder",
+  "key": "ShowStatusBar",
+  "title": "Finder: show status bar",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.finder",
+  "key": "_FXShowPosixPathInTitle",
+  "title": "Finder: full path in window title (hidden tweak)",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.finder",
+  "key": "FXEnableExtensionChangeWarning",
+  "title": "Finder: warn before changing an extension",
+  "defaultValue": true
+ },
+ {
+  "domain": "com.apple.finder",
+  "key": "QuitMenuItem",
+  "title": "Finder: Quit menu item (hidden tweak)",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.finder",
+  "key": "CreateDesktop",
+  "title": "Finder: show desktop icons (hidden tweak)",
+  "defaultValue": true
+ },
+ {
+  "domain": "com.apple.finder",
+  "key": "DisableAllAnimations",
+  "title": "Finder: disable animations (hidden tweak)",
+  "defaultValue": false
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "AppleShowAllExtensions",
+  "title": "Show all filename extensions",
+  "defaultValue": false
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "KeyRepeat",
+  "title": "Keyboard: key repeat rate",
+  "defaultValue": null,
+  "note": "Values below the System Settings minimum can only be set from the command line."
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "InitialKeyRepeat",
+  "title": "Keyboard: delay until repeat",
+  "defaultValue": null
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "ApplePressAndHoldEnabled",
+  "title": "Keyboard: press-and-hold accent menu (hidden tweak)",
+  "defaultValue": true
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "NSAutomaticSpellingCorrectionEnabled",
+  "title": "Text: correct spelling automatically",
+  "defaultValue": true
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "NSWindowResizeTime",
+  "title": "Window resize animation speed (hidden tweak)",
+  "defaultValue": null
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "NSAutomaticWindowAnimationsEnabled",
+  "title": "Window opening animations (hidden tweak)",
+  "defaultValue": true
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "AppleInterfaceStyle",
+  "title": "Appearance: dark mode",
+  "defaultValue": null
+ },
+ {
+  "domain": "com.apple.universalaccess",
+  "key": "cursorIsCustomized",
+  "title": "Pointer: custom outline or fill color",
+  "defaultValue": false,
+  "note": "Set when the pointer outline or fill color was changed. To undo it now: System Settings › Accessibility › Display › Pointer › Reset."
+ },
+ {
+  "domain": "com.apple.universalaccess",
+  "key": "mouseDriverCursorSize",
+  "title": "Pointer: size",
+  "defaultValue": 1
+ },
+ {
+  "domain": "com.apple.universalaccess",
+  "key": "reduceMotion",
+  "title": "Accessibility: reduce motion",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.screencapture",
+  "key": "location",
+  "title": "Screenshots: save location",
+  "defaultValue": null
+ },
+ {
+  "domain": "com.apple.screencapture",
+  "key": "type",
+  "title": "Screenshots: file format (hidden tweak)",
+  "defaultValue": "png"
+ },
+ {
+  "domain": "com.apple.screencapture",
+  "key": "disable-shadow",
+  "title": "Screenshots: window shadow (hidden tweak)",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.LaunchServices",
+  "key": "LSQuarantine",
+  "title": "Gatekeeper: “downloaded from the internet” prompt (hidden tweak)",
+  "defaultValue": true,
+  "note": "Turning this off weakens a macOS safety check."
+ },
+ {
+  "domain": "com.apple.desktopservices",
+  "key": "DSDontWriteNetworkStores",
+  "title": "Finder: no .DS_Store on network drives (hidden tweak)",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "wvous-tl-corner",
+  "title": "Hot corner: top left",
+  "defaultValue": null
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "wvous-tr-corner",
+  "title": "Hot corner: top right",
+  "defaultValue": null
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "wvous-bl-corner",
+  "title": "Hot corner: bottom left",
+  "defaultValue": null
+ },
+ {
+  "domain": "com.apple.dock",
+  "key": "wvous-br-corner",
+  "title": "Hot corner: bottom right",
+  "defaultValue": 14,
+  "note": "macOS default is Quick Note."
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "AppleEnableSwipeNavigateWithScrolls",
+  "title": "Trackpad: swipe between pages",
+  "defaultValue": true
+ },
+ {
+  "domain": "NSGlobalDomain",
+  "key": "com.apple.swipescrolldirection",
+  "title": "Trackpad: natural scrolling",
+  "defaultValue": true
+ },
+ {
+  "domain": "com.apple.WindowManager",
+  "key": "EnableTiledWindowMargins",
+  "title": "Windows: margins between tiled windows",
+  "defaultValue": true
+ },
+ {
+  "domain": "com.apple.WindowManager",
+  "key": "EnableStandardClickToShowDesktop",
+  "title": "Desktop: click wallpaper to reveal desktop",
+  "defaultValue": true
+ },
+ {
+  "domain": "com.apple.WindowManager",
+  "key": "GloballyEnabled",
+  "title": "Stage Manager",
+  "defaultValue": false
+ },
+ {
+  "domain": "com.apple.screencapture",
+  "key": "showsClicks",
+  "title": "Screenshots: show mouse clicks in recordings",
+  "defaultValue": false
+ }
 ]

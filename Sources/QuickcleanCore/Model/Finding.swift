@@ -21,6 +21,7 @@ public enum Kind: String, Codable, Sendable, Hashable {
     case launchAgent, launchDaemon, privilegedHelper, systemExtension, kext, loginItems
     case quickLookPlugin, spotlightImporter, preferencePane, inputMethod, font, colorProfile
     case screenSaver, audioPlugin, internetPlugin, safariExtension, mailBundle
+    case fileSystem, cameraPlugin, service, appScripts
     case brewFormula, brewCask, brewTap, devCache, devData, dotfile
     case settingsKey
 }

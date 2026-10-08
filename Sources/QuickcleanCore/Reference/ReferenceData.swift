@@ -49,6 +49,15 @@ public enum JSONValue: Codable, Sendable, Hashable {
         }
     }
 
+    /// Equal as a setting: plists store switches as either booleans or 0/1 numbers.
+    public func sameSetting(as other: JSONValue) -> Bool {
+        switch (self, other) {
+        case (.bool(let b), .number(let n)), (.number(let n), .bool(let b)): return n == (b ? 1 : 0)
+        case (.number(let a), .number(let b)): return abs(a - b) < 0.000_1
+        default: return self == other
+        }
+    }
+
     public var display: String {
         switch self {
         case .bool(let b): b ? "on" : "off"

@@ -9,9 +9,14 @@ public struct AddonsScanner: Scanner {
         ("Input Methods", .inputMethod), ("Fonts", .font), ("ColorSync/Profiles", .colorProfile),
         ("Screen Savers", .screenSaver), ("Audio/Plug-Ins/Components", .audioPlugin), ("Audio/Plug-Ins/VST", .audioPlugin),
         ("Audio/Plug-Ins/VST3", .audioPlugin), ("Audio/Plug-Ins/HAL", .audioPlugin), ("Internet Plug-Ins", .internetPlugin),
+        ("Filesystems", .fileSystem), ("CoreMediaIO/Plug-Ins/DAL", .cameraPlugin), ("Services", .service), ("Automator", .service),
     ]
+    /// macOS caches that live inside add-on folders.
+    static let ignoredNames: Set<String> = ["ExtensionsCache"]
     static let userOnly: [(String, Kind)] = [("Safari/Extensions", .safariExtension), ("Mail/Bundles", .mailBundle)]
-    static let behaviorChanging: Set<Kind> = [.inputMethod, .preferencePane, .screenSaver, .mailBundle, .safariExtension, .internetPlugin]
+    static let behaviorChanging: Set<Kind> = [
+        .inputMethod, .preferencePane, .screenSaver, .mailBundle, .safariExtension, .internetPlugin, .fileSystem, .cameraPlugin, .service,
+    ]
 
     public init() {}
 
@@ -22,7 +27,7 @@ public struct AddonsScanner: Scanner {
             + Self.shared.map { (env.path("Library/\($0.0)"), $0.1, true) }
             + Self.userOnly.map { (env.homePath("Library/\($0.0)"), $0.1, false) }
         for (dir, kind, system) in places {
-            for url in Listing.children(dir, into: &out) {
+            for url in Listing.children(dir, into: &out) where !Self.ignoredNames.contains(url.lastPathComponent) {
                 let info = Listing.bundleInfo(url)
                 let id = info?["CFBundleIdentifier"] as? String ?? url.deletingPathExtension().lastPathComponent
                 let name = info?["CFBundleName"] as? String ?? url.deletingPathExtension().lastPathComponent

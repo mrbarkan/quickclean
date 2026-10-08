@@ -17,7 +17,8 @@ public struct DevToolingScanner: Scanner {
         (".cargo/registry", "Cargo registry cache", "Rust"),
         ("Library/Caches/go-build", "Go build cache", "Go"),
         ("go/pkg/mod", "Go module cache", "Go"),
-        (".gradle/caches", "Gradle cache", "Gradle"),
+        (".gradle", "Gradle caches and wrappers", "Gradle"),
+        (".cache", "Tool caches (~/.cache)", "Command-line tools"),
         ("Library/Caches/CocoaPods", "CocoaPods cache", "CocoaPods"),
     ]
     static let data: [(String, String, String)] = [
@@ -32,6 +33,7 @@ public struct DevToolingScanner: Scanner {
         ("Library/Containers/com.docker.docker", "Docker Desktop data", "Docker"),
         (".docker", "Docker settings and contexts", "Docker"),
         (".ollama/models", "Ollama models", "Ollama"),
+        ("Library/Android/sdk", "Android SDK", "Android Studio"),
     ]
     static let ignoredDotfiles: Set<String> = [".DS_Store", ".localized", ".Trash", ".CFUserTextEncoding"]
 
@@ -63,8 +65,12 @@ public struct DevToolingScanner: Scanner {
 
     /// App bundle names installed by Homebrew casks, from `brew info --json=v2 --installed`.
     public static func caskApps(from json: Data) -> Set<String> {
-        guard let root = try? JSONSerialization.jsonObject(with: json) as? [String: Any],
-              let casks = root["casks"] as? [[String: Any]] else { return [] }
+        guard let root = try? JSONSerialization.jsonObject(with: json) as? [String: Any] else { return [] }
+        return caskApps(from: root)
+    }
+
+    static func caskApps(from root: [String: Any]) -> Set<String> {
+        guard let casks = root["casks"] as? [[String: Any]] else { return [] }
         var apps = Set<String>()
         for cask in casks {
             for artifact in cask["artifacts"] as? [Any] ?? [] {
@@ -110,37 +116,68 @@ public struct DevToolingScanner: Scanner {
             owner: Owner(bundleID: nil, displayName: "Homebrew", teamID: nil), status: .installed, confidence: .high,
             evidence: Evidence(rule: "homebrew", detail: "Listed by `brew info --installed`."))
         var taps = Set<String>()
+        var reported = Set<String>()
 
         for f in info["formulae"] as? [[String: Any]] ?? [] {
             guard let name = f["name"] as? String else { continue }
             let full = f["full_name"] as? String ?? name
+            reported.insert(name)
             if let tap = f["tap"] as? String { taps.insert(tap) }
             let isLeaf = leaves.contains(full) || leaves.contains(name)
+            let onRequest = (f["installed"] as? [[String: Any]])?.contains { $0["installed_on_request"] as? Bool == true } ?? true
+            let role = !isLeaf ? "Needed by other formulae."
+                : onRequest ? "Installed on its own; nothing else needs it."
+                : "Was installed as a dependency, but nothing needs it any more."
             let desc = f["desc"] as? String
-            let detail = [desc.map { "\($0)." }, isLeaf ? "Installed on its own; nothing else needs it." : "Needed by other formulae."]
-                .compactMap { $0 }.joined(separator: " ")
+            let detail = [desc.map { "\($0)." }, role].compactMap { $0 }.joined(separator: " ")
             let path = prefix.appending(path: "Cellar/\(name)")
             out.findings.append(RawFinding(
                 category: .devTooling, kind: .brewFormula, name: full, paths: [path], identifier: full, preset: owner,
                 modified: Listing.modified(path), detail: detail, riskOverride: isLeaf ? .review : .careful,
                 idOverride: "devTooling:brew:formula:\(full)"))
         }
+        // Formulae from untrusted or removed taps are missing from `brew info --installed`.
+        for dir in Listing.children(prefix.appending(path: "Cellar"), into: &out) where !reported.contains(dir.lastPathComponent) {
+            out.findings.append(RawFinding(
+                category: .devTooling, kind: .brewFormula, name: dir.lastPathComponent, paths: [dir],
+                identifier: dir.lastPathComponent, preset: owner, modified: Listing.modified(dir),
+                detail: "In Homebrew's Cellar but not reported by `brew info`; its tap may be untrusted or removed.",
+                riskOverride: .review, idOverride: "devTooling:brew:formula:\(dir.lastPathComponent)"))
+        }
         for c in info["casks"] as? [[String: Any]] ?? [] {
             guard let token = c["token"] as? String else { continue }
             if let tap = c["tap"] as? String { taps.insert(tap) }
             let path = prefix.appending(path: "Caskroom/\(token)")
+            var details = [(c["desc"] as? String).map { "\($0)." }].compactMap { $0 }
+            var badges: Set<Badge> = []
+            let apps = Self.caskApps(from: ["casks": [c]])
+            if let missing = apps.sorted().first(where: { app in
+                !FileManager.default.fileExists(atPath: env.path("Applications/\(app)").path)
+                    && !FileManager.default.fileExists(atPath: env.homePath("Applications/\(app)").path)
+            }) {
+                badges.insert(.broken)
+                details.append("Its app \(missing) is no longer in Applications.")
+            }
             out.findings.append(RawFinding(
                 category: .devTooling, kind: .brewCask, name: token, paths: [path], identifier: token, preset: owner,
-                modified: Listing.modified(path), detail: (c["desc"] as? String).map { "\($0)." }, riskOverride: .review,
-                idOverride: "devTooling:brew:cask:\(token)"))
+                badges: badges, modified: Listing.modified(path), detail: details.isEmpty ? nil : details.joined(separator: " "),
+                riskOverride: .review, idOverride: "devTooling:brew:cask:\(token)"))
         }
-        for tap in taps.subtracting(["homebrew/core", "homebrew/cask"]).sorted() {
+        var tapPaths: [String: URL] = [:]
+        for user in Listing.children(prefix.appending(path: "Library/Taps"), into: &out) {
+            for repo in Listing.children(user, into: &out) where repo.lastPathComponent.hasPrefix("homebrew-") {
+                tapPaths["\(user.lastPathComponent)/\(repo.lastPathComponent.dropFirst("homebrew-".count))"] = repo
+            }
+        }
+        for tap in taps.union(tapPaths.keys).subtracting(["homebrew/core", "homebrew/cask"]).sorted() {
             let parts = tap.split(separator: "/")
             guard parts.count == 2 else { continue }
-            let path = prefix.appending(path: "Library/Taps/\(parts[0])/homebrew-\(parts[1])")
+            let path = tapPaths[tap] ?? prefix.appending(path: "Library/Taps/\(parts[0])/homebrew-\(parts[1])")
+            let detail = taps.contains(tap) ? "Third-party Homebrew repository."
+                : "Third-party Homebrew repository; no installed formula or cask uses it."
             out.findings.append(RawFinding(
                 category: .devTooling, kind: .brewTap, name: tap, paths: [path], identifier: tap, preset: owner,
-                detail: "Third-party Homebrew repository.", riskOverride: .review, idOverride: "devTooling:brew:tap:\(tap)"))
+                detail: detail, riskOverride: .review, idOverride: "devTooling:brew:tap:\(tap)"))
         }
     }
 
@@ -160,8 +197,10 @@ public struct DevToolingScanner: Scanner {
     }
 
     private func scanDotfiles(_ env: ScanEnvironment, into out: inout ScanOutput) {
+        // A dotfolder is covered only when the entry that claims it actually exists.
         let covered = Set((Self.caches + Self.data).compactMap { rel, _, _ in
-            rel.hasPrefix(".") ? String(rel.split(separator: "/")[0]) : nil
+            rel.hasPrefix(".") && FileManager.default.fileExists(atPath: env.homePath(rel).path)
+                ? String(rel.split(separator: "/")[0]) : nil
         })
         let entries = (try? FileManager.default.contentsOfDirectory(at: env.home, includingPropertiesForKeys: [.contentModificationDateKey])) ?? []
         for url in entries.sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) {

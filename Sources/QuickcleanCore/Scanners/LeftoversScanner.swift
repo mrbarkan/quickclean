@@ -8,7 +8,7 @@ public struct LeftoversScanner: Scanner {
         ("Application Support", .appSupport), ("Caches", .cache), ("Preferences", .preferences),
         ("Containers", .container), ("Group Containers", .groupContainer),
         ("Saved Application State", .savedState), ("HTTPStorages", .httpStorage), ("WebKit", .webkitData),
-        ("Logs", .logs), ("Cookies", .cookies),
+        ("Logs", .logs), ("Cookies", .cookies), ("Application Scripts", .appScripts),
     ]
 
     public init() {}

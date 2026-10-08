@@ -22,6 +22,7 @@ public struct Overview: Sendable {
 
     static let behaviorKinds: Set<Kind> = [
         .inputMethod, .preferencePane, .screenSaver, .mailBundle, .safariExtension, .internetPlugin, .kext,
+        .fileSystem, .service,
     ]
 
     public init(findings: [Finding], reference: ReferenceData) {
