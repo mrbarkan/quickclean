@@ -61,7 +61,8 @@ public struct SystemScanner: Scanner {
         }
 
         for receipt in receipts {
-            let sample = receipt.files.prefix(Self.payloadSample)
+            let step = max(1, receipt.files.count / Self.payloadSample)
+            let sample = stride(from: 0, to: receipt.files.count, by: step).prefix(Self.payloadSample).map { receipt.files[$0] }
             let surviving = sample.filter { FileManager.default.fileExists(atPath: receipt.base.appending(path: $0).path) }.count
             var badges: Set<Badge> = []
             let payload: String
@@ -97,7 +98,8 @@ public struct SystemScanner: Scanner {
         let volumeURL = volume == "/" ? env.root : URL(fileURLWithPath: volume)
         let base = location.isEmpty ? volumeURL : volumeURL.appending(path: location)
         let installed = fields["install-time"].flatMap(TimeInterval.init).map(Date.init(timeIntervalSince1970:))
-        let files = (try? await env.commands.run(pkgutil, ["--files", id], timeout: 10))?.stdout
+        // Folders like Applications or Library always exist; only files tell whether the payload survived.
+        let files = (try? await env.commands.run(pkgutil, ["--only-files", "--files", id], timeout: 10))?.stdout
             .split(separator: "\n").map(String.init) ?? []
         return Receipt(id: id, base: base, installed: installed, files: files)
     }
@@ -105,8 +107,10 @@ public struct SystemScanner: Scanner {
     /// A path inside the app the package installed, so attribution can tell whether it's still there.
     private static func appPath(base: URL, files: [String]) -> String? {
         if base.pathExtension == "app" { return base.appending(path: "Contents").path }
-        guard let app = files.first(where: { $0.hasSuffix(".app") && !$0.contains("/") }) else { return nil }
-        return base.appending(path: "\(app)/Contents").path
+        guard let file = files.first(where: { $0.contains(".app/") }),
+              let range = file.range(of: ".app/")
+        else { return nil }
+        return base.appending(path: "\(file[..<range.lowerBound]).app/Contents").path
     }
 
     // MARK: Default apps
@@ -115,9 +119,8 @@ public struct SystemScanner: Scanner {
         let plist = env.homePath("Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist")
         guard let handlers = NSDictionary(contentsOf: plist)?["LSHandlers"] as? [[String: Any]] else { return }
         for handler in handlers {
-            guard let app = (handler["LSHandlerRoleAll"] ?? handler["LSHandlerRoleViewer"] ?? handler["LSHandlerRoleEditor"]) as? String,
-                  app != "-", !app.lowercased().hasPrefix("com.apple.")
-            else { continue }
+            let roles = ["LSHandlerRoleAll", "LSHandlerRoleViewer", "LSHandlerRoleEditor"].compactMap { handler[$0] as? String }
+            guard let app = roles.first(where: { $0 != "-" }), !app.lowercased().hasPrefix("com.apple.") else { continue }
             let name: String
             let key: String
             if let scheme = handler["LSHandlerURLScheme"] as? String {
@@ -147,7 +150,7 @@ public struct SystemScanner: Scanner {
                 var badges: Set<Badge> = []
                 var detail = "Installed outside any app or package manager."
                 if let dest = try? fm.destinationOfSymbolicLink(atPath: url.path) {
-                    let target = URL(fileURLWithPath: dest, relativeTo: dir).standardizedFileURL.path
+                    let target = Self.resolve(dest, from: url.deletingLastPathComponent().path)
                     // Homebrew on Intel Macs lives in /usr/local; Dev Tooling reports it.
                     if target.contains("/Cellar/") || target.contains("/Caskroom/") || target.contains("/Homebrew/") { continue }
                     program = target
@@ -164,6 +167,20 @@ public struct SystemScanner: Scanner {
                     modified: Listing.modified(url), detail: detail, inSystemDomain: true))
             }
         }
+    }
+
+    /// Joins a symlink target to its folder and folds "." and ".." without touching the disk
+    /// (URL standardization would also rewrite /private/var to /var).
+    static func resolve(_ target: String, from folder: String) -> String {
+        var parts: [Substring] = target.hasPrefix("/") ? [] : folder.split(separator: "/")
+        for part in target.split(separator: "/") {
+            switch part {
+            case ".": continue
+            case "..": if !parts.isEmpty { parts.removeLast() }
+            default: parts.append(part)
+            }
+        }
+        return "/" + parts.joined(separator: "/")
     }
 
     private func scanFrameworks(_ env: ScanEnvironment, into out: inout ScanOutput) {
@@ -208,8 +225,9 @@ public struct SystemScanner: Scanner {
         var seen = Set<String>()
         for block in output.components(separatedBy: "\n\n") {
             let lines = block.split(separator: "\n").map(String.init)
-            guard let header = lines.first(where: { !$0.trimmingCharacters(in: .whitespaces).isEmpty }),
-                  let match = header.firstMatch(of: /^([+\-!=]?)\s+([^\s(]+)\(/)
+            // Header: optional election flag (+ - ! = ? .) anywhere before the ID, then "id(version)".
+            guard let header = lines.first(where: { !$0.hasPrefix("\t") && $0.contains("(") }),
+                  let match = header.firstMatch(of: /^\s*([+\-!=?.]?)\s*([^\s(]+)\(/)
             else { continue }
             let flag = String(match.1)
             let id = String(match.2)
@@ -234,7 +252,9 @@ public struct SystemScanner: Scanner {
 
     // MARK: /etc
 
-    static let stockHosts: Set<String> = ["127.0.0.1 localhost", "255.255.255.255 broadcasthost", "::1 localhost"]
+    static let stockHosts: Set<String> = [
+        "127.0.0.1 localhost", "255.255.255.255 broadcasthost", "::1 localhost", "fe80::1%lo0 localhost",
+    ]
 
     private func scanEtc(_ env: ScanEnvironment, into out: inout ScanOutput) {
         let etc = env.path("private/etc")
@@ -250,9 +270,10 @@ public struct SystemScanner: Scanner {
         }
         let hosts = etc.appending(path: "hosts")
         if let text = try? String(contentsOf: hosts, encoding: .utf8) {
-            let custom = text.split(separator: "\n").map { line in
-                line.split(whereSeparator: { $0 == " " || $0 == "\t" }).joined(separator: " ")
-            }.filter { !$0.isEmpty && !$0.hasPrefix("#") && !Self.stockHosts.contains($0) }
+            let custom = text.components(separatedBy: .newlines).map { line in
+                (line.split(separator: "#", maxSplits: 1, omittingEmptySubsequences: false).first ?? "")
+                    .split(whereSeparator: { $0 == " " || $0 == "\t" }).joined(separator: " ")
+            }.filter { !$0.isEmpty && !Self.stockHosts.contains($0) }
             if !custom.isEmpty {
                 out.findings.append(RawFinding(
                     category: .system, kind: .systemConfig, name: "hosts", paths: [hosts], identifier: "hosts",

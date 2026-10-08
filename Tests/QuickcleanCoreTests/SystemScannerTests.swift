@@ -47,9 +47,9 @@ private func systemFixture() throws -> (Fixture, ScanEnvironment) {
     let env = fx.env(commands: [
         "\(pkg) --pkgs": .ok("com.apple.pkg.Core\ncom.tailscale.ipn.macsys\ncom.vendor.tool.pkg\n"),
         "\(pkg) --pkg-info com.tailscale.ipn.macsys": .ok("package-id: com.tailscale.ipn.macsys\nversion: 1.98.1\nvolume: /\nlocation: Applications/Tailscale.app\ninstall-time: 1778808385\n"),
-        "\(pkg) --files com.tailscale.ipn.macsys": .ok("Contents\nContents/Info.plist\n"),
+        "\(pkg) --only-files --files com.tailscale.ipn.macsys": .ok("Contents\nContents/Info.plist\n"),
         "\(pkg) --pkg-info com.vendor.tool.pkg": .ok("package-id: com.vendor.tool.pkg\nversion: 2\nvolume: /\nlocation: usr/local/bin\ninstall-time: 1778808385\n"),
-        "\(pkg) --files com.vendor.tool.pkg": .ok("vtool\n"),
+        "\(pkg) --only-files --files com.vendor.tool.pkg": .ok("vtool\n"),
         "/usr/bin/pluginkit -mAvvv": .ok(pluginkitOutput),
     ])
     return (fx, env)

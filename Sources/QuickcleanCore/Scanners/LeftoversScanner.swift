@@ -32,13 +32,16 @@ public struct LeftoversScanner: Scanner {
             }
         }
         // Shared data every user account can see.
-        for url in Listing.children(env.path("Users/Shared"), into: &out) where !Self.sharedStock.contains(url.lastPathComponent) {
+        for url in Listing.children(env.path("Users/Shared"), into: &out) where !Self.isStockShared(url.lastPathComponent) {
             out.findings.append(finding(url, .appSupport, true))
         }
         return out
     }
 
-    static let sharedStock: Set<String> = ["SC Info"]
+    /// Folders macOS itself keeps in /Users/Shared (update relocations included).
+    static func isStockShared(_ name: String) -> Bool {
+        ["SC Info", "Library"].contains(name) || name.hasPrefix("Relocated Items") || name.hasPrefix("Previously Relocated Items")
+    }
 
     private func finding(_ url: URL, _ kind: Kind, _ system: Bool) -> RawFinding {
         var raw = RawFinding(

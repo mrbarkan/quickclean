@@ -45,18 +45,28 @@ public struct SettingsScanner: Scanner {
         var seen = Set<String>()
         for url in Self.fileURLs(in: plist) {
             let path = url.path
-            guard !path.hasPrefix("/System/"), seen.insert(path).inserted else { continue }
+            guard !Self.isAppleWallpaperStore(path), seen.insert(path).inserted else { continue }
             let inApp = Identifier.appName(fromPath: path)
             let missing = !FileManager.default.fileExists(atPath: path)
             guard inApp != nil || missing else { continue }
             let detail = inApp.map { "The desktop picture is an image inside \($0).app, so it disappears or breaks if that app is removed." }
                 ?? "The desktop picture points to \(path), which no longer exists."
+            // A missing image has nothing to attribute it to; the setting itself is the finding.
+            let preset = inApp == nil ? PresetAttribution(
+                owner: Owner(bundleID: nil, displayName: "Wallpaper setting", teamID: nil), status: .unknown, confidence: .medium,
+                evidence: Evidence(rule: "wallpaperMissing", detail: "The wallpaper index points to a file that doesn't exist.")) : nil
             out.findings.append(RawFinding(
                 category: .settings, kind: .settingsReference,
                 name: inApp.map { "Wallpaper from \($0)" } ?? "Wallpaper image is missing",
-                paths: [index], identifier: inApp ?? "wallpaper", programPath: path,
+                paths: [index], identifier: inApp ?? "wallpaper", programPath: path, preset: preset,
                 badges: missing ? [.broken] : [], detail: detail, idOverride: "settings:wallpaper:\(path)"))
         }
+    }
+
+    /// Images macOS manages itself (built-in pictures and downloaded wallpaper caches it refills).
+    static func isAppleWallpaperStore(_ path: String) -> Bool {
+        path.hasPrefix("/System/") || path.hasPrefix("/Library/Desktop Pictures/")
+            || path.contains("/com.apple.mobileAssetDesktop/") || path.contains("/com.apple.idleassetsd/")
     }
 
     /// Every file:// URL in a property list, including inside nested binary plists.
