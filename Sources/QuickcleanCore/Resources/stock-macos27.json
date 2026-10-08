@@ -1,1 +1,5 @@
-{"appBundleIDs":[],"appleNames":[],"protectedHomePaths":[]}
+{
+  "appBundleIDs": ["com.apple.Safari"],
+  "appleNames": ["geoservices", "crashreporter", "knowledge", "addressbook", "callhistorydb", "clouddocs", "apple", "icloud", "familycircle", "syncservices", "mobilesync", "dock", "homekit"],
+  "protectedHomePaths": ["Documents", "Desktop", "Library/Keychains", "Library/Mail", "Library/Mobile Documents", "Pictures/Photos Library.photoslibrary"]
+}
