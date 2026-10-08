@@ -77,13 +77,14 @@ final class Fixture: @unchecked Sendable {
     func env(
         commands: [String: CommandResult] = [:],
         signatures: [String: SignatureInfo] = [:],
+        spotlight: [String: URL] = [:],
         preferences: [String: [String: Any]]? = nil,
         running: Set<String> = []
     ) -> ScanEnvironment {
         ScanEnvironment(
             home: home, root: root,
             commands: StubCommandRunner(commands),
-            bundles: StubBundleInspector(signatures),
+            bundles: StubBundleInspector(signatures, spotlight: spotlight),
             preferences: preferences.map { DictPreferences($0) } ?? PlistPreferencesReader(home: home),
             now: Fixture.now, runningBundleIDs: running)
     }
@@ -107,7 +108,8 @@ extension CommandResult {
 /// Keyed by bundle id read from Info.plist; unsigned when absent.
 struct StubBundleInspector: BundleInspector {
     let byBundleID: [String: SignatureInfo]
-    init(_ m: [String: SignatureInfo]) { byBundleID = m }
+    var spotlight: [String: URL] = [:]
+    init(_ m: [String: SignatureInfo], spotlight: [String: URL] = [:]) { byBundleID = m; self.spotlight = spotlight }
     func signature(of url: URL) -> SignatureInfo {
         let info = NSDictionary(contentsOf: url.appending(path: "Contents/Info.plist"))
         let id = info?["CFBundleIdentifier"] as? String ?? ""
@@ -115,6 +117,7 @@ struct StubBundleInspector: BundleInspector {
     }
     func lastUsed(_ url: URL) -> Date? { nil }
     func locateApp(bundleID: String) -> URL? { nil }
+    func spotlightApp(bundleID: String) -> URL? { spotlight[bundleID] }
 }
 
 struct DictPreferences: PreferencesReader, @unchecked Sendable {

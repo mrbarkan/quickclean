@@ -22,6 +22,7 @@ case $CHANNEL in alpha|beta|rc|stable) ;; *) die "channel must be alpha, beta, r
 
 cd "$(git rev-parse --show-toplevel)"
 [[ -z $(git status --porcelain) ]] || die "working tree has uncommitted changes"
+COMMIT=$(git rev-parse HEAD)
 grep -q "version = \"$VERSION\"" Sources/QuickcleanCore/Version.swift || die "Version.swift does not say $VERSION"
 grep -q "channel = \"$CHANNEL\"" Sources/QuickcleanCore/Version.swift || die "Version.swift does not say channel $CHANNEL"
 security find-identity -v -p codesigning | grep -qF "$IDENTITY" || die "signing identity not found: $IDENTITY"
@@ -52,17 +53,23 @@ APP="$OUT/export/Quickclean.app"
 
 step "Verifying signature"
 codesign --verify --deep --strict --verbose=2 "$APP"
-codesign -dv "$APP" 2>&1 | grep -q "flags=.*runtime" || die "hardened runtime is not enabled"
-codesign -dv "$APP" 2>&1 | grep -q "TeamIdentifier=$TEAM" || die "app is not signed by team $TEAM"
+SIGNATURE=$(codesign -dv "$APP" 2>&1)
+[[ $SIGNATURE =~ flags=.*runtime ]] || die "hardened runtime is not enabled"
+[[ $SIGNATURE == *"TeamIdentifier=$TEAM"* ]] || die "app is not signed by team $TEAM"
 
 notarize() {
     local file=$1 log=$2
-    xcrun notarytool submit "$file" --keychain-profile "$PROFILE" --wait --output-format json > "$log"
+    xcrun notarytool submit "$file" --keychain-profile "$PROFILE" --wait --output-format json > "$log" || true
     local status
-    status=$(/usr/bin/python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("status",""))' "$log")
+    status=$(/usr/bin/python3 -c 'import json,sys
+try: print(json.load(open(sys.argv[1])).get("status", ""))
+except Exception: print("")' "$log")
     if [[ $status != Accepted ]]; then
         local id
-        id=$(/usr/bin/python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("id",""))' "$log")
+        id=$(/usr/bin/python3 -c 'import json,sys
+try: print(json.load(open(sys.argv[1])).get("id", ""))
+except Exception: print("")' "$log")
+        cat "$log" >&2
         [[ -n $id ]] && xcrun notarytool log "$id" --keychain-profile "$PROFILE" >&2 || true
         die "notarization of $(basename "$file") returned '$status'"
     fi
@@ -91,7 +98,8 @@ xcrun stapler validate "$DMG"
 spctl --assess --type execute --verbose=2 "$APP"
 spctl --assess --type open --context context:primary-signature --verbose=2 "$DMG"
 
-git tag -a "$TAG" -m "Quickclean $VERSION ($CHANNEL)"
+[[ $(git rev-parse HEAD) == "$COMMIT" ]] || die "HEAD moved during the build; not tagging (built $COMMIT)"
+git tag -a "$TAG" -m "Quickclean $VERSION ($CHANNEL)" "$COMMIT"
 
 step "Done"
 echo "tag:      $TAG (not pushed)"

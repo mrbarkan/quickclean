@@ -14,7 +14,7 @@ Run together:
 
 ```bash
 git status --short; git branch --show-current; git log --oneline -1
-git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || echo "none"
+git tag --list 'v*' --sort=-v:refname | head -5
 security find-identity -v -p codesigning | grep "Developer ID Application"
 xcrun notarytool history --keychain-profile "${NOTARY_PROFILE:-notarytool}" >/dev/null && echo notary-ok
 ```
@@ -45,15 +45,10 @@ The user can type another version via "Other". Validate: `^[0-9]+\.[0-9]+\.[0-9]
 2. Add a `CHANGELOG.md` entry at the top: `## VERSION (Channel) — YYYY-MM-DD`, summarizing
    `git log --oneline <last-tag>..HEAD` (skip chores; group as Added / Changed / Fixed).
 3. Run `swift test`; stop on failure and show the failing tests.
-4. Show the user any other uncommitted changes and propose a commit message for them; commit them first.
+4. If there are other uncommitted changes, show them and propose a commit message; commit them only after the user approves.
 5. Commit the release: `chore(release): VERSION CHANNEL` (with the session's Co-Authored-By trailer).
 
-## 4. Push
-
-Push the current branch (`git push -u origin HEAD`). If the branch isn't `main`, ask whether to merge
-into `main` first (fast-forward only) — releases are normally cut from `main`.
-
-## 5. Build, sign, notarize
+## 4. Build, sign, notarize
 
 ```bash
 Scripts/release.sh VERSION CHANNEL
@@ -63,14 +58,17 @@ Run it in the background (notarization takes minutes) and wait for it to finish.
 archives, verifies hardened runtime + team, notarizes and staples the app, builds and signs the DMG,
 notarizes and staples the DMG, runs Gatekeeper checks and creates the annotated tag locally.
 On failure, show the relevant log from `build/release/<tag>/` and stop — do not retry blindly.
+Don't commit while it runs: the script refuses to tag if HEAD moved.
 
-## 6. Publish
+## 5. Push and publish
 
-1. `git push origin <tag>`
-2. Ask whether to publish a GitHub release with the DMG attached:
+1. If the branch isn't `main`, ask whether to fast-forward `main` to it first — releases are normally cut from `main`.
+2. Push the branch and the tag: `git push -u origin HEAD && git push origin <tag>`
+3. Ask whether to publish a GitHub release with the DMG attached. Write this version's CHANGELOG section to a
+   temporary notes file first, then:
    ```bash
    gh release create <tag> build/release/<tag>/Quickclean-*.dmg --title "Quickclean VERSION (Channel)" \
-     --notes-file <changelog section> [--prerelease  # for alpha, beta, rc]
+     --notes-file <notes file> [--prerelease  # for alpha, beta, rc]
    ```
 
 Report: tag, DMG path, SHA-256, notarization IDs (from `build/release/<tag>/notary-*.json`), release URL if published.

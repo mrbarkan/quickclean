@@ -60,7 +60,9 @@ public struct ScanEngine: Sendable {
 
         let index = AppIndexBuilder.build(env, reference: reference, caskApps: caskApps)
         let bundles = env.bundles
-        let attributor = Attributor(index: index, reference: reference, locateApp: { bundles.locateApp(bundleID: $0) })
+        let attributor = Attributor(index: index, reference: reference, locateApp: {
+            bundles.locateApp(bundleID: $0) ?? bundles.spotlightApp(bundleID: $0)
+        })
         let classifier = Classifier(reference: reference, env: env)
 
         let scanners: [any Scanner] = [

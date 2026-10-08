@@ -113,6 +113,8 @@ public protocol BundleInspector: Sendable {
     func lastUsed(_ url: URL) -> Date?
     /// Where LaunchServices knows an app with this bundle ID, if it still exists.
     func locateApp(bundleID: String) -> URL?
+    /// Where Spotlight indexed an app with this bundle ID (covers apps never launched or on other volumes).
+    func spotlightApp(bundleID: String) -> URL?
 }
 
 /// Reads code signatures (without hashing the whole bundle) and Spotlight's last-used date.
@@ -146,6 +148,23 @@ public struct LiveBundleInspector: BundleInspector {
               !url.path.contains("/.Trash/")
         else { return nil }
         return url
+    }
+
+    public func spotlightApp(bundleID: String) -> URL? {
+        let id = bundleID.filter { $0 != "\"" && $0 != "\\" }
+        guard let query = MDQueryCreate(kCFAllocatorDefault, "kMDItemCFBundleIdentifier == \"\(id)\"" as CFString, nil, nil),
+              MDQueryExecute(query, CFOptionFlags(kMDQuerySynchronous.rawValue))
+        else { return nil }
+        for i in 0..<MDQueryGetResultCount(query) {
+            guard let raw = MDQueryGetResultAtIndex(query, i) else { continue }
+            let item = Unmanaged<MDItem>.fromOpaque(raw).takeUnretainedValue()
+            guard let path = MDItemCopyAttribute(item, kMDItemPath) as? String,
+                  path.hasSuffix(".app"), !path.contains("/.Trash/"),
+                  FileManager.default.fileExists(atPath: path)
+            else { continue }
+            return URL(fileURLWithPath: path)
+        }
+        return nil
     }
 }
 

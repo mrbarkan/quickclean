@@ -96,6 +96,10 @@ public struct Attributor: Sendable {
                 owner: Owner(bundleID: id, displayName: name, teamID: nil), status: .installed, confidence: .high,
                 evidence: [Evidence(rule: "launchServices", detail: "macOS knows an app with this ID at \(url.path).")])
         }
+        let lowered = id.lowercased()
+        if let app = index.apps.first(where: { lowered.hasPrefix($0.bundleID.lowercased() + ".") }) {
+            return installed(app, .medium, Evidence(rule: "extendsAppID", detail: "Its ID extends \(app.bundleID), the ID of \(app.name)."))
+        }
         let known = reference.knownApp(for: id)
         if let known, known.isLibrary { return library(known) }
         if let known, let a = installedKnown(known) { return a }
@@ -134,6 +138,11 @@ public struct Attributor: Sendable {
     private func installedKnown(_ known: KnownApp) -> Attribution? {
         let evidence = Evidence(rule: "knownApp", detail: "Matches the known pattern for \(known.name).")
         if let app = known.bundleID.flatMap(index.app(bundleID:)) { return installed(app, .medium, evidence) }
+        if let id = known.bundleID, let url = locateApp(id) {
+            return Attribution(
+                owner: Owner(bundleID: id, displayName: known.name, teamID: nil), status: .installed, confidence: .medium,
+                evidence: [evidence, Evidence(rule: "launchServices", detail: "macOS knows \(known.name) at \(url.path).")])
+        }
         for k in reference.knownApps where k.name == known.name {
             if let path = k.installedPaths?.first(where: fileExists) {
                 return Attribution(

@@ -15,6 +15,8 @@ public struct LeftoversScanner: Scanner {
 
     public func scan(_ env: ScanEnvironment, index: AppIndex) async -> ScanOutput {
         var out = ScanOutput()
+        // Developer caches and data are reported (once) by the Dev Tooling scanner.
+        let claimed = Set((DevToolingScanner.caches + DevToolingScanner.data).map { env.homePath($0.0).path })
         for (library, system) in [(env.homePath("Library"), false), (env.path("Library"), true)] {
             for (folder, kind) in Self.locations {
                 let dir = library.appending(path: folder)
@@ -23,7 +25,9 @@ public struct LeftoversScanner: Scanner {
                     let byHost = Listing.children(dir.appending(path: "ByHost"), into: &out).filter { $0.pathExtension == "plist" }
                     for url in files + byHost { out.findings.append(finding(url, kind, system)) }
                 } else {
-                    for url in Listing.children(dir, into: &out) { out.findings.append(finding(url, kind, system)) }
+                    for url in Listing.children(dir, into: &out) where !claimed.contains(url.path) {
+                        out.findings.append(finding(url, kind, system))
+                    }
                 }
             }
         }
