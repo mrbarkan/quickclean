@@ -1,0 +1,50 @@
+name: Quickclean
+options:
+  bundleIdPrefix: io.github.mrbarkan
+  deploymentTarget:
+    macOS: "27.0"
+  createIntermediateGroups: true
+packages:
+  QuickcleanCore:
+    path: ..
+settings:
+  base:
+    MARKETING_VERSION: 0.0.1
+    CURRENT_PROJECT_VERSION: 1
+    QC_CHANNEL: alpha
+    DEVELOPMENT_TEAM: L26TPPMPF3
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+targets:
+  Quickclean:
+    type: application
+    platform: macOS
+    sources: [Quickclean]
+    dependencies:
+      - package: QuickcleanCore
+    info:
+      path: Quickclean/Info.plist
+      properties:
+        CFBundleDisplayName: Quickclean
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        QCChannel: $(QC_CHANNEL)
+        LSApplicationCategoryType: public.app-category.utilities
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSHumanReadableCopyright: "© 2026 David Barkan. Free and open source under the MIT License."
+    entitlements:
+      path: Quickclean/Quickclean.entitlements
+      properties: {}
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.mrbarkan.quickclean
+        PRODUCT_NAME: Quickclean
+        ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_APP_SANDBOX: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+      configs:
+        Release:
+          CODE_SIGN_IDENTITY: "Developer ID Application"
+          OTHER_CODE_SIGN_FLAGS: "--timestamp"
