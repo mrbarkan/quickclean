@@ -27,8 +27,12 @@ public struct Classifier: Sendable {
     public func classify(_ raw: RawFinding, _ a: Attribution) -> Finding {
         let (risk, reason) = risk(raw, a)
         var badges = raw.badges
-        if let modified = raw.modified, env.now.timeIntervalSince(modified) > Self.staleAge { badges.insert(.stale) }
-        if raw.kind != .settingsKey, let id = a.owner?.bundleID, env.runningBundleIDs.contains(id) { badges.insert(.running) }
+        // A background item's file date is its install date, and its owner running says nothing about the job.
+        let isBackground = Self.backgroundKinds.contains(raw.kind)
+        if !isBackground, let modified = raw.modified, env.now.timeIntervalSince(modified) > Self.staleAge { badges.insert(.stale) }
+        if !isBackground, raw.kind != .settingsKey, let id = a.owner?.bundleID, env.runningBundleIDs.contains(id) {
+            badges.insert(.running)
+        }
 
         let selected = risk == .safe && a.confidence == .high && a.status == .orphaned && !badges.contains(.running)
         return Finding(

@@ -62,7 +62,7 @@ public struct Attributor: Sendable {
         "com.apple.lsd", "com.apple.mobile.installd",
     ]
 
-    static let applePrefixes = ["com.apple.", "org.cups.", "is.workflow."]
+    static let applePrefixes = ["com.apple.", "org.cups.", "is.workflow.", "com.openssh."]
 
     private static func dropGroupPrefix(_ id: String) -> String {
         for prefix in ["systemgroup.", "groups.", "group."] where id.lowercased().hasPrefix(prefix) {

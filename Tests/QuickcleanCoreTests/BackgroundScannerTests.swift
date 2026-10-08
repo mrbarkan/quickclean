@@ -52,7 +52,7 @@ private func scan(_ fx: Fixture, commands: [String: CommandResult]? = nil) async
     #expect(kinds["com.gone.daemon"] == .launchDaemon)
     #expect(kinds["com.gone.helper"] == .privilegedHelper)
     #expect(kinds["com.foo.driver"] == .kext)
-    let nonExtensions = out.findings.filter { $0.kind != .systemExtension }
+    let nonExtensions = out.findings.filter { $0.kind != .systemExtension && $0.kind != .loginItems }
     #expect(nonExtensions.allSatisfy { $0.inSystemDomain })
 }
 

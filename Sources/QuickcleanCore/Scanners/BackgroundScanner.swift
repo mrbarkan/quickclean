@@ -12,7 +12,9 @@ public struct BackgroundScanner: Scanner {
 
     public func scan(_ env: ScanEnvironment, index: AppIndex) async -> ScanOutput {
         var out = ScanOutput()
-        let running = await loadedLabels(env, into: &out)
+        let jobs = await launchdJobs(env)
+        let processes = await runningPrograms(env)
+        var seenLabels = Set<String>()
 
         let jobDirs: [(URL, Kind, Bool)] = [
             (env.homePath("Library/LaunchAgents"), .launchAgent, false),
@@ -21,15 +23,27 @@ public struct BackgroundScanner: Scanner {
         ]
         for (dir, kind, system) in jobDirs {
             for url in Listing.children(dir, into: &out) where url.pathExtension == "plist" {
-                out.findings.append(launchJob(url, kind: kind, system: system, running: running, into: &out))
+                let job = launchJob(url, kind: kind, system: system, jobs: jobs, processes: processes, into: &out)
+                seenLabels.insert(job.identifier ?? "")
+                out.findings.append(job)
             }
         }
 
         for url in Listing.children(env.path("Library/PrivilegedHelperTools"), into: &out) {
             out.findings.append(RawFinding(
                 category: .background, kind: .privilegedHelper, name: url.lastPathComponent, paths: [url],
-                identifier: url.lastPathComponent, modified: Listing.modified(url),
+                identifier: url.lastPathComponent, badges: processes.contains(url.path) ? [.running] : [],
+                modified: Listing.modified(url),
                 detail: "Runs with administrator privileges on behalf of an app.", inSystemDomain: true))
+        }
+
+        // Jobs apps register through SMAppService have no plist in the LaunchAgents folders.
+        for (label, pid) in jobs.sorted(by: { $0.key < $1.key }) where !seenLabels.contains(label) && Self.isRegisteredJob(label) {
+            out.findings.append(RawFinding(
+                category: .background, kind: .loginItems, name: label, paths: [], identifier: label,
+                badges: pid ? [.running] : [],
+                detail: "Registered by an app as a login item or background helper, without a plist file. Managed in System Settings › General › Login Items & Extensions.",
+                idOverride: "background:job:\(label)"))
         }
 
         for url in Listing.children(env.path("Library/Extensions"), into: &out) where url.pathExtension == "kext" {
@@ -45,7 +59,15 @@ public struct BackgroundScanner: Scanner {
         return out
     }
 
-    private func launchJob(_ url: URL, kind: Kind, system: Bool, running: Set<String>, into out: inout ScanOutput) -> RawFinding {
+    /// Third-party launchd labels, excluding running app instances ("application.…") and macOS's own jobs.
+    static func isRegisteredJob(_ label: String) -> Bool {
+        let l = label.lowercased()
+        return !l.hasPrefix("application.") && !l.hasPrefix("com.apple.") && !l.hasPrefix("com.openssh.")
+            && Identifier.isBundleLike(label)
+    }
+
+    private func launchJob(_ url: URL, kind: Kind, system: Bool, jobs: [String: Bool], processes: Set<String>,
+                           into out: inout ScanOutput) -> RawFinding {
         let fallbackID = Identifier.strip(url.lastPathComponent)
         guard let plist = NSDictionary(contentsOf: url) as? [String: Any] else {
             out.issues.append(ScanIssue(subject: url.path, reason: "Not a readable launchd property list."))
@@ -60,22 +82,35 @@ public struct BackgroundScanner: Scanner {
             badges.insert(.broken)
             details.append("Its program \(program) no longer exists.")
         }
+        if plist.isEmpty {
+            details.append("Empty placeholder: launchd ignores it, so it does nothing.")
+        }
         if plist["RunAtLoad"] as? Bool == true || plist["KeepAlive"] != nil {
             details.append(kind == .launchDaemon ? "Starts automatically when the Mac starts up." : "Starts automatically at login.")
         }
-        if running.contains(label) { badges.insert(.running) }
+        if jobs[label] == true || program.map(processes.contains) == true { badges.insert(.running) }
         return RawFinding(
             category: .background, kind: kind, name: label, paths: [url], identifier: label, programPath: program,
             badges: badges, modified: Listing.modified(url), detail: details.isEmpty ? nil : details.joined(separator: " "),
             inSystemDomain: system)
     }
 
-    private func loadedLabels(_ env: ScanEnvironment, into out: inout ScanOutput) async -> Set<String> {
-        guard let r = try? await env.commands.run("/bin/launchctl", ["list"], timeout: 10), r.status == 0 else { return [] }
-        return Set(r.stdout.split(separator: "\n").dropFirst().compactMap { line in
+    /// The user's launchd jobs: label → whether it has a running process.
+    private func launchdJobs(_ env: ScanEnvironment) async -> [String: Bool] {
+        guard let r = try? await env.commands.run("/bin/launchctl", ["list"], timeout: 10), r.status == 0 else { return [:] }
+        var jobs: [String: Bool] = [:]
+        for line in r.stdout.split(separator: "\n").dropFirst() {
             let cols = line.split(separator: "\t", omittingEmptySubsequences: false)
-            return cols.count >= 3 ? String(cols[2]) : nil
-        })
+            guard cols.count >= 3 else { continue }
+            jobs[String(cols[2])] = cols[0] != "-"
+        }
+        return jobs
+    }
+
+    /// Executable paths of every running process, including root daemons.
+    private func runningPrograms(_ env: ScanEnvironment) async -> Set<String> {
+        guard let r = try? await env.commands.run("/bin/ps", ["-axo", "comm="], timeout: 10), r.status == 0 else { return [] }
+        return Set(r.stdout.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) })
     }
 
     private func systemExtensions(_ env: ScanEnvironment, index: AppIndex, into out: inout ScanOutput) async -> [RawFinding] {
@@ -88,6 +123,13 @@ public struct BackgroundScanner: Scanner {
             return []
         }
         var findings: [RawFinding] = []
+        var staged: [String: URL] = [:]
+        for folder in (try? FileManager.default.contentsOfDirectory(at: env.path("Library/SystemExtensions"), includingPropertiesForKeys: nil)) ?? [] {
+            for ext in (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)) ?? []
+            where ext.pathExtension == "systemextension" {
+                staged[ext.deletingPathExtension().lastPathComponent] = ext
+            }
+        }
         for line in result.stdout.split(separator: "\n") {
             let cols = line.split(separator: "\t", omittingEmptySubsequences: false).map(String.init)
             guard cols.count >= 6, cols[2].range(of: #"^[A-Z0-9]{10}$"#, options: .regularExpression) != nil else { continue }
@@ -96,7 +138,8 @@ public struct BackgroundScanner: Scanner {
             let name = cols[4]
             let state = cols[5].trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
             findings.append(RawFinding(
-                category: .background, kind: .systemExtension, name: name, paths: [], identifier: bundleID,
+                category: .background, kind: .systemExtension, name: name,
+                paths: staged[bundleID].map { [$0] } ?? [], identifier: bundleID,
                 preset: extensionOwner(bundleID: bundleID, team: team, name: name, index: index),
                 detail: "State: \(state). Managed in System Settings › General › Login Items & Extensions.",
                 idOverride: "background:sysext:\(bundleID)"))
