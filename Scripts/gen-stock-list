@@ -74,8 +74,15 @@ helper agent daemon service user root index history report daily export importer
 installer uninstall storage store editor console metal mouse keyboard battery lightning code python node java
 go git cache data logs log temp tmp update updater settings config preferences sync cloud""".split())
 
+# /etc as macOS ships it (third-party additions seen on the source Mac removed).
+etc_third_party = {"anydesk", "paths.d/homebrew"}
+etc = set(os.listdir("/private/etc"))
+etc |= {"paths.d/" + n for n in os.listdir("/private/etc/paths.d")}
+etc -= etc_third_party
+
 json.dump({
     "appBundleIDs": sorted(bundle_ids),
+    "etcEntries": sorted(etc),
     "appleNames": sorted(names),
     "protectedHomePaths": ["Documents", "Desktop", "Library/Keychains", "Library/Mail", "Library/Mobile Documents",
                            "Pictures/Photos Library.photoslibrary"],

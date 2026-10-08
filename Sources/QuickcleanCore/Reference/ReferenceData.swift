@@ -8,11 +8,14 @@ public struct StockReference: Codable, Sendable {
     public var appleNames: Set<String>
     /// Home-relative paths that are never offered for removal.
     public var protectedHomePaths: [String]
+    /// Entries a clean install has in /etc, including "paths.d/<name>".
+    public var etcEntries: Set<String>?
 
-    public init(appBundleIDs: Set<String>, appleNames: Set<String>, protectedHomePaths: [String]) {
+    public init(appBundleIDs: Set<String>, appleNames: Set<String>, protectedHomePaths: [String], etcEntries: Set<String>? = nil) {
         self.appBundleIDs = appBundleIDs
         self.appleNames = appleNames
         self.protectedHomePaths = protectedHomePaths
+        self.etcEntries = etcEntries
     }
 
     public func isAppleName(_ name: String) -> Bool { appleNames.contains(name.lowercased()) }

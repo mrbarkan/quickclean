@@ -38,6 +38,7 @@ extension ScanCategory {
         case .addons: "puzzlepiece.extension"
         case .devTooling: "hammer"
         case .settings: "slider.horizontal.3"
+        case .system: "wrench.and.screwdriver"
         }
     }
 }

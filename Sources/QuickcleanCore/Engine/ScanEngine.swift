@@ -67,7 +67,7 @@ public struct ScanEngine: Sendable {
 
         let scanners: [any Scanner] = [
             AppsScanner(), LeftoversScanner(), BackgroundScanner(), AddonsScanner(),
-            DevToolingScanner(brewInfo: brewInfo), SettingsScanner(reference: reference),
+            DevToolingScanner(brewInfo: brewInfo), SettingsScanner(reference: reference), SystemScanner(reference: reference),
         ].filter { categories.contains($0.category) }
 
         let env = env

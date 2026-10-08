@@ -32,6 +32,45 @@ public struct SettingsScanner: Scanner {
                     detail: detail, idOverride: "settings:\(domain):\(setting.key)"))
             }
         }
+        scanWallpaper(env, into: &out)
         return out
+    }
+
+    /// Wallpapers whose image lives inside an app bundle (theming apps) or no longer exists.
+    private func scanWallpaper(_ env: ScanEnvironment, into out: inout ScanOutput) {
+        let index = env.homePath("Library/Application Support/com.apple.wallpaper/Store/Index.plist")
+        guard let data = try? Data(contentsOf: index),
+              let plist = try? PropertyListSerialization.propertyList(from: data, format: nil)
+        else { return }
+        var seen = Set<String>()
+        for url in Self.fileURLs(in: plist) {
+            let path = url.path
+            guard !path.hasPrefix("/System/"), seen.insert(path).inserted else { continue }
+            let inApp = Identifier.appName(fromPath: path)
+            let missing = !FileManager.default.fileExists(atPath: path)
+            guard inApp != nil || missing else { continue }
+            let detail = inApp.map { "The desktop picture is an image inside \($0).app, so it disappears or breaks if that app is removed." }
+                ?? "The desktop picture points to \(path), which no longer exists."
+            out.findings.append(RawFinding(
+                category: .settings, kind: .settingsReference,
+                name: inApp.map { "Wallpaper from \($0)" } ?? "Wallpaper image is missing",
+                paths: [index], identifier: inApp ?? "wallpaper", programPath: path,
+                badges: missing ? [.broken] : [], detail: detail, idOverride: "settings:wallpaper:\(path)"))
+        }
+    }
+
+    /// Every file:// URL in a property list, including inside nested binary plists.
+    static func fileURLs(in value: Any) -> [URL] {
+        switch value {
+        case let dict as [String: Any]: return dict.values.flatMap(fileURLs(in:))
+        case let array as [Any]: return array.flatMap(fileURLs(in:))
+        case let data as Data:
+            guard let inner = try? PropertyListSerialization.propertyList(from: data, format: nil) else { return [] }
+            return fileURLs(in: inner)
+        case let string as String where string.hasPrefix("file://"):
+            return URL(string: string).map { [$0] } ?? []
+        default:
+            return []
+        }
     }
 }

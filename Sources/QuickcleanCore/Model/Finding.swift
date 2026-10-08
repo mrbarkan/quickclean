@@ -1,7 +1,7 @@
 import Foundation
 
 public enum ScanCategory: String, Codable, Sendable, CaseIterable, Hashable {
-    case apps, leftovers, background, addons, devTooling, settings
+    case apps, leftovers, background, addons, devTooling, settings, system
 
     public var label: String {
         switch self {
@@ -11,6 +11,7 @@ public enum ScanCategory: String, Codable, Sendable, CaseIterable, Hashable {
         case .addons: "Add-ons"
         case .devTooling: "Dev Tooling"
         case .settings: "Settings"
+        case .system: "System Changes"
         }
     }
 }
@@ -22,6 +23,7 @@ public enum Kind: String, Codable, Sendable, Hashable {
     case quickLookPlugin, spotlightImporter, preferencePane, inputMethod, font, colorProfile
     case screenSaver, audioPlugin, internetPlugin, safariExtension, mailBundle
     case fileSystem, cameraPlugin, service, appScripts
+    case pkgReceipt, defaultHandler, commandLineTool, framework, appExtension, systemConfig, settingsReference
     case brewFormula, brewCask, brewTap, devCache, devData, dotfile
     case settingsKey
 }

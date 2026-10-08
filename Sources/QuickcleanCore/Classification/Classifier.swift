@@ -16,6 +16,7 @@ public struct Classifier: Sendable {
     ]
     private static let reviewKinds: Set<Kind> = [
         .preferences, .appSupport, .container, .groupContainer, .dotfile, .brewFormula, .brewCask, .brewTap, .app,
+        .pkgReceipt, .defaultHandler, .appExtension, .settingsReference,
     ]
     private static let disposableKinds: Set<Kind> = [.cache, .logs, .savedState, .httpStorage, .webkitData, .cookies]
 
@@ -70,7 +71,8 @@ public struct Classifier: Sendable {
 
     private func title(_ raw: RawFinding, _ a: Attribution) -> String {
         switch raw.kind {
-        case .app, .settingsKey, .brewFormula, .brewCask, .brewTap, .devCache, .devData, .dotfile:
+        case .app, .settingsKey, .brewFormula, .brewCask, .brewTap, .devCache, .devData, .dotfile,
+             .pkgReceipt, .defaultHandler, .commandLineTool, .framework, .appExtension, .systemConfig, .settingsReference:
             raw.name
         default:
             "\(a.owner?.displayName ?? raw.name) · \(Explainer.kindLabel(raw.kind))"

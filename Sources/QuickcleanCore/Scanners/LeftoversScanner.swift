@@ -31,8 +31,14 @@ public struct LeftoversScanner: Scanner {
                 }
             }
         }
+        // Shared data every user account can see.
+        for url in Listing.children(env.path("Users/Shared"), into: &out) where !Self.sharedStock.contains(url.lastPathComponent) {
+            out.findings.append(finding(url, .appSupport, true))
+        }
         return out
     }
+
+    static let sharedStock: Set<String> = ["SC Info"]
 
     private func finding(_ url: URL, _ kind: Kind, _ system: Bool) -> RawFinding {
         var raw = RawFinding(
