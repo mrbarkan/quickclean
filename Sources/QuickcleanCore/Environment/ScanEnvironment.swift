@@ -93,6 +93,7 @@ final class Locked<Value>: @unchecked Sendable {
         get { lock.withLock { _value } }
         set { lock.withLock { _value = newValue } }
     }
+    func mutate(_ body: (inout Value) -> Void) { lock.withLock { body(&_value) } }
 }
 
 // MARK: - Bundles
