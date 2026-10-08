@@ -65,3 +65,13 @@ import Testing
     #expect(out.findings.first { $0.identifier == "group.com.facebook.family" }?.creatorID == "net.whatsapp.WhatsApp")
     #expect(out.findings.first { $0.identifier == "com.plain.app" }?.creatorID == nil)
 }
+
+@Test func applicationScriptsBorrowTheirContainersCreator() async throws {
+    let fx = try Fixture()
+    try fx.dir("home/Library/Application Scripts/group.com.facebook.family")
+    try fx.plist("home/Library/Group Containers/group.com.facebook.family/.com.apple.containermanagerd.metadata.plist",
+                 ["MCMMetadataCreator": "net.whatsapp.WhatsApp"])
+    let out = await LeftoversScanner().scan(fx.env(), index: AppIndex(apps: []))
+    let scripts = out.findings.first { $0.kind == .appScripts }
+    #expect(scripts?.creatorID == "net.whatsapp.WhatsApp")
+}

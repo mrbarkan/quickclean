@@ -39,9 +39,18 @@ public struct LeftoversScanner: Scanner {
             category: .leftovers, kind: kind, name: url.lastPathComponent, paths: [url],
             identifier: Identifier.strip(url.lastPathComponent), modified: Listing.modified(url),
             inSystemDomain: system)
-        if kind == .container || kind == .groupContainer {
-            let metadata = NSDictionary(contentsOf: url.appending(path: ".com.apple.containermanagerd.metadata.plist"))
-            raw.creatorID = metadata?["MCMMetadataCreator"] as? String
+        let metadataName = ".com.apple.containermanagerd.metadata.plist"
+        switch kind {
+        case .container, .groupContainer:
+            raw.creatorID = NSDictionary(contentsOf: url.appending(path: metadataName))?["MCMMetadataCreator"] as? String
+        case .appScripts:
+            // Application Scripts folders mirror a container of the same name.
+            let library = url.deletingLastPathComponent().deletingLastPathComponent()
+            raw.creatorID = ["Group Containers", "Containers"].lazy.compactMap { folder in
+                NSDictionary(contentsOf: library.appending(path: "\(folder)/\(url.lastPathComponent)/\(metadataName)"))?["MCMMetadataCreator"] as? String
+            }.first
+        default:
+            break
         }
         return raw
     }

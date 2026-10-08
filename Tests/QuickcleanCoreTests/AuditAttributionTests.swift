@@ -103,3 +103,12 @@ private func leftover(_ id: String, kind: Kind = .appSupport, program: String? =
     r.identifier = ".claude"
     #expect(attr([], r).owner?.displayName == "Claude Code CLI")
 }
+
+@Test func exactKnownBundleIDIsNotCreditedToAnotherVendorApp() {
+    let excel = app("com.microsoft.Excel", "Microsoft Excel")
+    for id in ["com.microsoft.VSCode", "com.microsoft.edgemac"] {
+        let a = attr([excel], leftover(id, kind: .preferences))
+        #expect(a.status == .orphaned, "\(id)")
+        #expect(a.confidence == .high, "\(id)")
+    }
+}

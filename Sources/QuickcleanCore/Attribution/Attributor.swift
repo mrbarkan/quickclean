@@ -130,6 +130,12 @@ public struct Attributor: Sendable {
         }
         let known = reference.knownApp(for: id)
         if let known, known.bundleID?.lowercased() != lowered { return byKnown(known, id: id) }
+        if let known, known.bundleID?.lowercased() == lowered {
+            // Named exactly after a known app that isn't installed: no vendor fallback.
+            return Attribution(
+                owner: Owner(bundleID: id, displayName: known.name, teamID: nil), status: .orphaned, confidence: .high,
+                evidence: [Evidence(rule: "exactBundleIDNotInstalled", detail: "Named after \(known.name) (\(id)), which is not installed.")])
+        }
         if let vendor = Identifier.vendorPrefix(id) {
             let vendorApps = index.apps.filter { $0.bundleID.lowercased().hasPrefix(vendor + ".") }
             let parts = id.split(separator: ".")

@@ -63,11 +63,11 @@
     "defaultSelected" : true,
     "evidence" : [
       {
-        "detail" : "Named after com.spotify.client; no app with that ID is installed.",
+        "detail" : "Named after Spotify (com.spotify.client), which is not installed.",
         "rule" : "exactBundleIDNotInstalled"
       }
     ],
-    "explanation" : "Cache at ~/Library/Caches. Belongs to Spotify, which is no longer installed. Why: Named after com.spotify.client; no app with that ID is installed.",
+    "explanation" : "Cache at ~/Library/Caches. Belongs to Spotify, which is no longer installed. Why: Named after Spotify (com.spotify.client), which is not installed.",
     "id" : "leftovers:$HOME/Library/Caches/com.spotify.client",
     "kind" : "cache",
     "owner" : {
